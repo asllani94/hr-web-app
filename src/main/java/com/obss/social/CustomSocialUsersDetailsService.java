@@ -1,7 +1,7 @@
 package com.obss.social;
 
-import com.obss.Model.Dao.UserDao;
-import com.obss.Model.Jpa.User;
+import com.obss.Model.Dao.AccountDao;
+import com.obss.Model.Jpa.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.dao.DataAccessException;
@@ -18,14 +18,14 @@ import org.springframework.stereotype.Service;
 public class CustomSocialUsersDetailsService implements SocialUserDetailsService {
 
     @Autowired
-    private UserDao userDao;
+    private AccountDao accountDao;
 
     //when signin in with social, this method checks whenever it finds the user locally(user already registered)
     @Override
     public SocialUserDetails loadUserByUserId(String email) throws UsernameNotFoundException, DataAccessException {
 
         System.out.println("SocialUserDetailsServiceCalled");
-        User user=userDao.loadUserByEmail(email);
+        Account user= accountDao.loadUserByEmail(email);
         System.out.println("Found user  "+user.getEmail());
 
 

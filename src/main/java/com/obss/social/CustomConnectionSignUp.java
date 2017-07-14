@@ -3,29 +3,24 @@ package com.obss.social;
 /**
  * Created by arnold on 7/10/2017.
  */
-import com.obss.Model.Dao.UserDao;
-import com.obss.Model.Jpa.User;
+import com.obss.Model.Dao.AccountDao;
+import com.obss.Model.Jpa.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UserProfile;
-import org.springframework.social.linkedin.api.Company;
-import org.springframework.social.linkedin.api.LinkedIn;
-import org.springframework.social.linkedin.api.LinkedInProfileFull;
-import org.springframework.social.linkedin.api.impl.LinkedInTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.UUID;
 
 @Component
 public class CustomConnectionSignUp implements ConnectionSignUp {
 
-    private final UserDao usersDao;
+    private final AccountDao usersDao;
 
 
     @Autowired
-    public CustomConnectionSignUp(UserDao usersDao) {
+    public CustomConnectionSignUp(AccountDao usersDao) {
         this.usersDao = usersDao;
     }
 
@@ -40,9 +35,9 @@ public class CustomConnectionSignUp implements ConnectionSignUp {
         List<Company> companies=template.companyOperations().getFollowing();*/
 
         //Unique linkedin user id
-         String userId=connection.getKey().getProviderUserId();
+
         String email=profile.getEmail();
-        User user=new User(userId,email,profile.getFirstName(),profile.getLastName(),generateUserPassword());
+        Account user=new Account(email,profile.getFirstName(),profile.getLastName(),generateUserPassword());
         usersDao.createUser(user);
         return email;
     }

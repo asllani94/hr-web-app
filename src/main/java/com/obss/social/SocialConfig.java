@@ -1,6 +1,6 @@
 package com.obss.social;
 
-import com.obss.Model.Dao.UserDao;
+import com.obss.Model.Dao.AccountDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +11,6 @@ import org.springframework.social.config.annotation.SocialConfigurerAdapter;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
-import org.springframework.social.connect.web.ProviderSignInController;
 import org.springframework.social.security.AuthenticationNameUserIdSource;
 
 import javax.sql.DataSource;
@@ -26,7 +25,7 @@ public class SocialConfig extends SocialConfigurerAdapter {
     private DataSource dataSource;
 
     @Autowired
-    private UserDao myUserAccountDAO;
+    private AccountDao myUserAccountDAO;
 
 
     @Bean
@@ -35,6 +34,7 @@ public class SocialConfig extends SocialConfigurerAdapter {
         return new AuthenticationNameUserIdSource();
     }
 
+
     @Override
     public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
         JdbcUsersConnectionRepository usersConnectionRepository = new JdbcUsersConnectionRepository(dataSource,
@@ -42,15 +42,6 @@ public class SocialConfig extends SocialConfigurerAdapter {
         usersConnectionRepository.setConnectionSignUp(new CustomConnectionSignUp(myUserAccountDAO));
         return  usersConnectionRepository;
     }
-    /*
 
-    @Bean
-    public ProviderSignInController providerSignInController(ConnectionFactoryLocator connectionFactoryLocator,
-                                                             UsersConnectionRepository usersConnectionRepository) {
-        return new ProviderSignInController(
-                connectionFactoryLocator,
-                usersConnectionRepository,
-                new CustomSignInAdapter(myUserAccountDAO));
-    }
-*/
+
 }
