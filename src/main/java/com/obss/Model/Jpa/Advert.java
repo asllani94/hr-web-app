@@ -1,5 +1,8 @@
 package com.obss.Model.Jpa;
 
+import com.obss.Model.Jpa.Extras.ApplicationStatus;
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -25,8 +28,23 @@ public class Advert {
     private Timestamp adActivationTime;
     private Timestamp adDeadlineTime;
     private boolean adStatus;
-    @OneToMany(mappedBy = "advert")
-    private Set<Application> applications=new HashSet<Application>( );
+
+
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy ="pk.advert", cascade =
+            {CascadeType.PERSIST, CascadeType.MERGE},orphanRemoval = true)
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
+    private Set<Application> accounts=new HashSet<Application>( );
+
+
+
+
+
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinTable(name = "advert_skills", joinColumns = @JoinColumn(name = "ad_code"), inverseJoinColumns = @JoinColumn(name = "skill_id"))
+    private Set<Skill> skills=new HashSet<>();
+
+
 
     public  Advert(){}
 
@@ -80,31 +98,62 @@ public class Advert {
     }
 
     public Set<Application> getApplications() {
-        return applications;
+        return accounts;
     }
 
     public void setApplications(Set<Application> applications) {
-        this.applications = applications;
+        this.accounts = applications;
     }
 
-    /*
-    @Override
-    public boolean equals(Object o) {
-        if ( this == o ) {
-            return true;
-        }
-        if ( o == null || getClass() != o.getClass() ) {
-            return false;
-        }
-        Advert address = (Advert) o;
-        return Objects.equals( adHeader, address.adHeader ) &&
-                Objects.equals( adDescription, address.adDescription ) &&
-                Objects.equals( adStatus, address.adStatus );
+    public void addAccount (Account account){
+     Application application= new Application();
+     application.setAccount(account);
+     application.setAdvert(this);
+     application.setStatus(ApplicationStatus.ON_PROCESS);
+     if (accounts==null)
+         accounts=new HashSet<>();
+
+     this.accounts.add(application);
+     account.getApplications().add(application);
+
+
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash( adHeader,adDescription, adStatus );
+    public void removeApplication (Application application){
+        if(this.accounts!=null){
+            accounts.remove(application);
+        }
+
     }
-    */
+
+
+
+    public Set<Skill> getSkills() {
+        if (this.skills == null) {
+            this.skills = new HashSet<>();
+        }
+        return this.skills;
+    }
+
+    public void setSkills(Set<Skill> skills) {
+        this.skills=skills;
+    }
+
+    public void addSkill(Skill skill){
+        if(this.skills==null) {
+            skills = new HashSet<>();
+            skills.add(skill);
+        }
+        else
+            skills.add(skill);
+
+    }
+
+
+    public  void removeSkill(Skill skill){
+        if(skills!=null)
+            skills.remove(skill);
+    }
+
+
 }

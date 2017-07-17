@@ -24,11 +24,11 @@ public class UserController {
         if(isAdmin(auth)){
 
             //Current logged user has admin authority so we need to redirect it
-            return "redirect:/admin/dashboard";
+            return "redirect: /admin/dashboard";
         }
 
 
-        return "/user/welcome";
+        return "redirect:/user/ilanlar";
     }
 
     private boolean isAdmin(Authentication auth){

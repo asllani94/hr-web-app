@@ -1,4 +1,4 @@
-package com.obss.Model.Jpa;
+package com.obss.Model.Jpa.Extras;
 
 /**
  * Created by arnold on 7/14/2017.

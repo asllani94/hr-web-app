@@ -5,6 +5,7 @@ package com.obss.social;
  */
 import com.obss.Model.Dao.AccountDao;
 import com.obss.Model.Jpa.Account;
+import com.obss.Model.Jpa.AccountDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
@@ -35,9 +36,17 @@ public class CustomConnectionSignUp implements ConnectionSignUp {
         List<Company> companies=template.companyOperations().getFollowing();*/
 
         //Unique linkedin user id
-
         String email=profile.getEmail();
         Account user=new Account(email,profile.getFirstName(),profile.getLastName(),generateUserPassword());
+
+        //here we get extra info from LinkedIn API (using mock because not approved)
+        AccountDetails accountDetails=new AccountDetails();
+        accountDetails.setTitle("Software Developer");
+        accountDetails.setAddress("Rasimpasa Mah, Kadikoy-Istanbul ");
+        accountDetails.setEducation("Istanbul Teknik Universitesi");
+        accountDetails.setExperience("3 years of experience");
+        user.setAccountDetails(accountDetails);
+
         usersDao.createUser(user);
         return email;
     }

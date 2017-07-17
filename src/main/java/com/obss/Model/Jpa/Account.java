@@ -1,10 +1,11 @@
 package com.obss.Model.Jpa;
 
+import com.obss.Model.Jpa.Extras.ApplicationId;
+import com.obss.Model.Jpa.Extras.ApplicationStatus;
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -12,18 +13,34 @@ import java.util.Set;
  */
 @Entity
 public class Account   {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "account_id", updatable = false, nullable = false)
+    @Column( updatable = false, nullable = false)
     private int accountId;
     private String email;
     private String firstName;
     private String lastName;
     private String password;
 
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_detail_id")
+    private AccountDetails accountDetails;
 
-    @OneToMany(mappedBy = "account")
-    private Set<Application> applications=new HashSet<Application>();
+    @JoinColumn(name = "blacklist_id")
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private Blacklist blacklist;
+
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinTable(name = "account_skills", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "skill_id"))
+    private Set<Skill> skills=new HashSet<Skill>();
+
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy ="pk.account", cascade =
+            {CascadeType.PERSIST, CascadeType.MERGE},orphanRemoval = true)
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
+    private Set<Application> adverts=new HashSet<Application>();
+
 
     public Account(){
 
@@ -84,29 +101,84 @@ public class Account   {
 
 
     public Set<Application> getApplications() {
-        return applications;
+        return adverts;
     }
 
     public void setApplications(Set<Application> applications) {
-        this.applications = applications;
+        this.adverts = applications;
     }
 
-    /*
+    public void applyToAdvert(Advert advert){
+      Application application=new Application();
+        ApplicationId key=new ApplicationId();
+        key.setAccount(this);
+        key.setAdvert(advert);
+      application.setPk(key);
+      application.setStatus(ApplicationStatus.ON_PROCESS);
+      if(adverts==null)
+          adverts=new HashSet<>();
 
-    @Override
-    public boolean equals(Object o) {
-        if ( this == o ) {
-            return true;
-        }
-        if ( o == null || getClass() != o.getClass() ) {
-            return false;
-        }
-        Account person = (Account) o;
-        return Objects.equals( email, person.email );
+      this.adverts.add(application);
+      advert.getApplications().add(application);
+
     }
-    @Override
-    public int hashCode() {
-        return Objects.hash( email );
+
+    public void removeApplication (Application application){
+
+        if(this.adverts!=null){
+            application.getAdvert().removeApplication(application);
+            adverts.remove(application);
+
+        }
+
     }
-    */
+
+
+
+    public AccountDetails getAccountDetails() {
+        return accountDetails;
+    }
+
+    public void setAccountDetails(AccountDetails accountDetails) {
+        this.accountDetails = accountDetails;
+    }
+
+
+
+    public Blacklist getBlacklist() {
+        return blacklist;
+    }
+
+    public void setBlacklist(Blacklist blacklist) {
+        this.blacklist = blacklist;
+    }
+
+
+
+    public Set<Skill> getSkills() {
+        if (this.skills == null) {
+            this.skills = new HashSet<>();
+        }
+        return this.skills;
+    }
+
+    public void setSkills(Set<Skill> skills) {
+        this.skills=skills;
+    }
+
+    public void addSkill(Skill skill){
+        if(this.skills==null) {
+            skills = new HashSet<>();
+            skills.add(skill);
+        }
+        else
+            skills.add(skill);
+
+    }
+
+
+    public  void removeSkill(Skill skill){
+        if(skills!=null)
+            skills.remove(skill);
+    }
 }
