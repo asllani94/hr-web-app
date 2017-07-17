@@ -7,25 +7,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 /**
  * Created by arnold on 7/10/2017.
+ * Controller responsible for login and signup
  */
 
 @Controller
 public class LoginController {
 
 
-    @RequestMapping("/user_login")
+    @RequestMapping("/login")
     public String userLogin()
     {
-        return "user_login";
+        return "login";
 
     }
 
-    @RequestMapping("/admin_login")
-    public String adminLogin()
-    {
-        return "admin_login";
 
-    }
 
 
 }

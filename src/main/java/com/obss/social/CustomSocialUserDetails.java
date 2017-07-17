@@ -1,6 +1,6 @@
 package com.obss.social;
 
-import com.obss.Model.Jpa.Account;
+import com.obss.Model.Entities.Account;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.social.security.SocialUserDetails;
@@ -11,12 +11,13 @@ import java.util.List;
 
 /**
  * Created by arnold on 7/11/2017.
+ * Implementation of SocialUserDetails class. Part of Spring Social Project
+ * Implemented according to the need of Human Resources App
  */
 public class CustomSocialUserDetails implements SocialUserDetails {
 
-    private Account user;
     private static final long serialVersionUID = -5246117266247684905L;
-
+    private Account user;
     private List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
 
     public CustomSocialUserDetails(Account user){

@@ -3,9 +3,10 @@ package com.obss;
 /**
  * Created by arnold on 7/17/2017.
  */
-import com.obss.Model.Jpa.*;
-import com.obss.Model.Rep.AdvertRepository;
-import com.obss.Model.Rep.SkillRepository;
+
+import com.obss.Model.Entities.*;
+import com.obss.Model.Repositories.AdvertRepository;
+import com.obss.Model.Repositories.SkillRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

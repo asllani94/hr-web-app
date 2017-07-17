@@ -1,9 +1,12 @@
-package com.obss.Model.Jpa.Extras;
+package com.obss.Model.Entities.Extras;
 
 /**
  * Created by arnold on 7/14/2017.
  */
 public class ApplicationStatus {
+
+
+    //Three phases of an application
 
     public static final  int ON_PROCESS=1;
     public static final  int ACCEPTED=2;

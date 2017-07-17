@@ -1,15 +1,16 @@
-package com.obss.Model.Jpa.Extras;
+package com.obss.Model.Entities.Extras;
 
-import com.obss.Model.Jpa.Account;
-import com.obss.Model.Jpa.Advert;
+import com.obss.Model.Entities.Account;
+import com.obss.Model.Entities.Advert;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 /**
  * Created by arnold on 7/14/2017.
+ *
+ *This class is a composite primary key for the Application Tabe
  */
 @Embeddable
 public  class ApplicationId implements Serializable {
@@ -22,20 +23,18 @@ public  class ApplicationId implements Serializable {
     public ApplicationId() {
 
     }
-
-
     @ManyToOne
     public Account getAccount() {
         return account;
     }
 
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
     @ManyToOne
     public Advert getAdvert() {
         return advert;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
     }
 
     public void setAdvert(Advert advert) {

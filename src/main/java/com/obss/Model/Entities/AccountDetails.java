@@ -1,4 +1,4 @@
-package com.obss.Model.Jpa;
+package com.obss.Model.Entities;
 
 import javax.persistence.*;
 

@@ -1,18 +1,12 @@
-package com.obss.Model.Jpa;
+package com.obss.Model.Entities;
 
-import com.obss.Model.Jpa.Extras.ApplicationStatus;
+import com.obss.Model.Entities.Extras.ApplicationStatus;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
-
-import static javax.persistence.GenerationType.AUTO;
-import static javax.persistence.GenerationType.IDENTITY;
 
 /**
  * Created by arnold on 7/13/2017.

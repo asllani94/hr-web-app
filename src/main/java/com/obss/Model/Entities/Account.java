@@ -1,7 +1,7 @@
-package com.obss.Model.Jpa;
+package com.obss.Model.Entities;
 
-import com.obss.Model.Jpa.Extras.ApplicationId;
-import com.obss.Model.Jpa.Extras.ApplicationStatus;
+import com.obss.Model.Entities.Extras.ApplicationId;
+import com.obss.Model.Entities.Extras.ApplicationStatus;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;

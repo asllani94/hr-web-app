@@ -1,9 +1,9 @@
 package com.obss;
 
-import com.obss.Model.Jpa.*;
-import com.obss.Model.Jpa.Extras.ApplicationStatus;
-import com.obss.Model.Rep.AccountRepository;
-import com.obss.Model.Rep.AdvertRepository;
+import com.obss.Model.Entities.*;
+import com.obss.Model.Entities.Extras.ApplicationStatus;
+import com.obss.Model.Repositories.AccountRepository;
+import com.obss.Model.Repositories.AdvertRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -150,7 +150,7 @@ public class AccountTests {
 
     @Test
     @Transactional
-    public void  testWithApplication(){
+    public void testWithNewApplication() {
         Account account=
                 new Account("asllani94@gmail.com","Arnold","Asllani","123456");
 
@@ -197,7 +197,7 @@ public class AccountTests {
 
     @Test
     @Transactional
-    public  void removeBlackListFromAccount(){
+    public void removeAccountFromBlackList() {
         Account account=
                 new Account("asllani94@gmail.com","Arnold","Asllani","123456");
         Blacklist blacklist=new Blacklist();

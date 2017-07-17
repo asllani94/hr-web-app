@@ -1,6 +1,6 @@
-package com.obss.Model.Jpa;
+package com.obss.Model.Entities;
 
-import com.obss.Model.Jpa.Extras.ApplicationId;
+import com.obss.Model.Entities.Extras.ApplicationId;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,6 +18,11 @@ public class Application  implements Serializable {
 
     @Id
     private ApplicationId pk=new ApplicationId();
+    @Column(name = "status")
+    private int status;
+
+    public Application() {
+    }
 
     @EmbeddedId
     public ApplicationId getPk() {
@@ -27,16 +32,6 @@ public class Application  implements Serializable {
     public void setPk(ApplicationId pk) {
         this.pk = pk;
     }
-
-
-
-    @Column(name = "status")
-    private int status;
-
-
-    public Application() {
-    }
-
 
     public int getStatus() {
         return status;
@@ -51,15 +46,16 @@ public class Application  implements Serializable {
     public Account getAccount(){
         return pk.getAccount();
     }
+
+    public void setAccount(Account account) {
+        this.pk.setAccount(account);
+    }
+
     @Transient
     public Advert getAdvert(){
         return pk.getAdvert();
     }
 
-
-    public void setAccount(Account account){
-        this.pk.setAccount(account);
-    }
     public void setAdvert(Advert advert){
         this.pk.setAdvert(advert);
     }

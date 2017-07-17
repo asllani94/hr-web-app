@@ -1,7 +1,7 @@
 package com.obss.social;
 
-import com.obss.Model.Dao.AccountDao;
-import com.obss.Model.Jpa.Account;
+import com.obss.Model.Services.AccountServiceImpl;
+import com.obss.Model.Entities.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,21 +17,22 @@ import java.util.UUID;
 
 /**
  * Created by arnold on 7/10/2017.
+ * Implementation of SignInAdapter. This class role is to sign in a user whenever found in local database
  */
 @Service
 public class CustomSignInAdapter implements SignInAdapter {
 
 
-    private final AccountDao accountDao;
+    private final AccountServiceImpl accountServiceImpl;
 
     @Autowired
-    public CustomSignInAdapter(AccountDao accountDao) {
-        this.accountDao = accountDao;
+    public CustomSignInAdapter(AccountServiceImpl accountServiceImpl) {
+        this.accountServiceImpl = accountServiceImpl;
     }
 
     @Override
     public String signIn(String email, Connection<?> connection, NativeWebRequest request) {
-        Account user= accountDao.loadUserByEmail(email);
+        Account user = accountServiceImpl.loadAccountByEmail(email);
 
         System.out.println("SignInAdapter called");
         if (user!=null){

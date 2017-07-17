@@ -1,6 +1,6 @@
-package com.obss.Model.Rep;
+package com.obss.Model.Repositories;
 
-import com.obss.Model.Jpa.Account;
+import com.obss.Model.Entities.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

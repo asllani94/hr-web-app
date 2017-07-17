@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * Created by arnold on 7/11/2017.
+ * Controller that manages Admin processes
  */
 @Controller
 public class AdminController {
