@@ -5,16 +5,19 @@ package com.obss.social;
  * This class is used to implicity register user if its his first time using web app
  */
 
+import com.obss.Model.Entities.Advert;
 import com.obss.Model.Entities.Skill;
 import com.obss.Model.Services.AccountServiceImpl;
 import com.obss.Model.Entities.Account;
 import com.obss.Model.Entities.AccountDetails;
+import com.obss.Model.Services.AdvertServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UserProfile;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Component
@@ -22,10 +25,14 @@ public class CustomConnectionSignUp implements ConnectionSignUp {
 
     private final AccountServiceImpl usersDao;
 
+    private final AdvertServiceImpl advertService;
+
+
 
     @Autowired
-    public CustomConnectionSignUp(AccountServiceImpl usersDao) {
+    public CustomConnectionSignUp(AccountServiceImpl usersDao, AdvertServiceImpl advertService) {
         this.usersDao = usersDao;
+        this.advertService = advertService;
     }
 
 
@@ -59,11 +66,39 @@ public class CustomConnectionSignUp implements ConnectionSignUp {
         user.addSkill(skill);
         user.addSkill(skill_1);
 
-        usersDao.createOrUpdateAccount(user);
+
+        populateDB(user);
+
         return email;
     }
     private String generateUserPassword(){
         return UUID.randomUUID().toString();
+
+    }
+
+    //only for testing
+    private void populateDB(Account account) {
+        Advert advert = new Advert();
+        advert.setAdHeader("Java developer araniyor");
+
+        advert.setAdDescription("onemli degil");
+        advert.setAdStatus(false);
+        advert.setAdActivationTime(new Timestamp(5000));
+        advert.setAdDeadlineTime(new Timestamp(5000));
+
+        Advert advert1 = new Advert();
+        advert1.setAdHeader("C++ developer araniyor");
+
+        advert1.setAdDescription("gagahah");
+        advert1.setAdStatus(false);
+        advert1.setAdActivationTime(new Timestamp(5000));
+        advert1.setAdDeadlineTime(new Timestamp(5000));
+
+        advertService.createOrSaveAdvert(advert);
+        advertService.createOrSaveAdvert(advert1);
+
+        account.applyToAdvert(advert);
+        usersDao.createOrUpdateAccount(account);
 
     }
 

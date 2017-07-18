@@ -1,0 +1,84 @@
+<!DOCTYPE html  "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sd="http://www.thymeleaf.org/spring-data"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+<head>
+    <title>Basvurular</title>
+</head>
+<body>
+<section layout:fragment="header">
+    <h1>Basvurularim</h1>
+    <ol class="breadcrumb">
+        <li><a href="/"><i class="fa fa-dashboard"></i> Anasayfa</a></li>
+        <li class="active">Basvurularim</li>
+    </ol>
+</section>
+<div layout:fragment="content">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Basvurularim</h3>
+
+                    <div class="box-tools">
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                            <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+
+                            <div class="input-group-btn">
+                                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr>
+                            <th>Ilan Kodu</th>
+                            <th>Ilan Basligi</th>
+                            <th>Basvuru tarihi</th>
+                            <th>Durum</th>
+                            <th>Islem</th>
+                        </tr>
+                        <tr th:each="listItem: ${list}">
+                            <td th:text="${listItem.adCode}"></td>
+                            <td th:text="${listItem.adHeader}"></td>
+                            <td>11-7-2014</td>
+                            <td th:switch="${listItem.status}">
+                                <span th:case="1" class="label label-primary">On Progress</span>
+                                <span th:case="2" class="label label-success">Approved</span>
+                                <span th:case="3" class="label label-warning">Rejected</span>
+                            </td>
+                            <td>
+                                <a th:href="${'/user/basvusu/delete/'+ listItem.adCode}"
+                                   class="btn btn-block btn-danger btn-xs">Iptal Et</a>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer clearfix">
+                    <ul class="pagination pagination-md no-margin ">
+                        <li><a href="#">«</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">»</a></li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+
+        <!-- /.col -->
+    </div>
+
+</div>
+</body>
+</html>

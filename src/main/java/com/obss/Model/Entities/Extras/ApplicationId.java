@@ -10,7 +10,7 @@ import java.io.Serializable;
 /**
  * Created by arnold on 7/14/2017.
  *
- *This class is a composite primary key for the Application Tabe
+ *This class is a composite primary key for the Application Table
  */
 @Embeddable
 public  class ApplicationId implements Serializable {

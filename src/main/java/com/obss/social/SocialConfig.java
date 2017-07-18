@@ -1,6 +1,7 @@
 package com.obss.social;
 
 import com.obss.Model.Services.AccountServiceImpl;
+import com.obss.Model.Services.AdvertServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +29,9 @@ public class SocialConfig extends SocialConfigurerAdapter {
     @Autowired
     private AccountServiceImpl myUserAccountServiceImpl;
 
+    @Autowired
+    private AdvertServiceImpl advertService;
+
 
     @Bean
     @Override
@@ -40,7 +44,7 @@ public class SocialConfig extends SocialConfigurerAdapter {
     public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
         JdbcUsersConnectionRepository usersConnectionRepository = new JdbcUsersConnectionRepository(dataSource,
                 connectionFactoryLocator, Encryptors.noOpText());
-        usersConnectionRepository.setConnectionSignUp(new CustomConnectionSignUp(myUserAccountServiceImpl));
+        usersConnectionRepository.setConnectionSignUp(new CustomConnectionSignUp(myUserAccountServiceImpl, advertService));
         return  usersConnectionRepository;
     }
 

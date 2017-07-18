@@ -1,8 +1,12 @@
 package com.obss.Model.Services.Interfaces;
 
 import com.obss.Model.Entities.Account;
+import com.obss.Model.Entities.Extras.ApplicationDetails;
+import com.obss.Model.Entities.Extras.UiSkill;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,5 +22,9 @@ public interface AccountService {
     public Account loadAccountByAccountId(int accountId);
 
     public List<Account> loadAllAccounts();
+
+    public ArrayList<ApplicationDetails> getUserApplications(String email);
+
+    public List<UiSkill> getAccountSkillsForUI(Account account);
 
 }

@@ -7,6 +7,8 @@ package com.obss.Controllers;
 
 import com.obss.Model.Entities.Account;
 import com.obss.Model.Entities.AccountDetails;
+import com.obss.Model.Entities.Extras.ApplicationDetails;
+import com.obss.Model.Entities.Extras.UiSkill;
 import com.obss.Model.Entities.Skill;
 import com.obss.Model.Services.AccountServiceImpl;
 import com.obss.Model.Services.Interfaces.AccountService;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -47,18 +50,50 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user/{account_id}")
-    public String userProfile(@PathVariable("account_id") int id, Model model) {
+    public String getUserWithId(@PathVariable("account_id") int id, Model model) {
         Account account = accountService.loadAccountByAccountId(id);
         if (account == null)
             return "/error";
 
         AccountDetails details = account.getAccountDetails();
-        Set<Skill> skills = account.getSkills();
+        ArrayList<UiSkill> skills = accountService.getAccountSkillsForUI(account);
         model.addAttribute("account", account);
         model.addAttribute("details", details);
         model.addAttribute("skills", skills);
         return "/user/profile";
 
+
+    }
+
+    @RequestMapping(value = "/user/profilim")
+    public String userProfile(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+
+        Account account = accountService.loadAccountByEmail(email);
+        if (account == null)
+            return "/error";
+
+        AccountDetails details = account.getAccountDetails();
+        ArrayList<UiSkill> skills = accountService.getAccountSkillsForUI(account);
+        model.addAttribute("account", account);
+        model.addAttribute("details", details);
+        model.addAttribute("skills", skills);
+        return "/user/profile";
+
+
+    }
+
+
+    @RequestMapping(value = "/user/basvurularim")
+    public String userApplications(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        ArrayList<ApplicationDetails> list = accountService.getUserApplications(email);
+
+        model.addAttribute("list", list);
+
+        return "/user/basvurularim";
 
     }
 

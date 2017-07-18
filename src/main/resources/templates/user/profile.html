@@ -49,7 +49,8 @@
                     <hr>
                     <strong><i class="fa fa-pencil margin-r-5"></i> Skills</strong>
                     <p>
-                        <span class="label label-danger" th:each="skill : ${skills}"
+                        <span th:class="${'label label-'+ skill.colorCode}" class="label label-danger"
+                              th:each="skill : ${skills}"
                               th:text="${skill.skillName}"
                         ></span>
 
@@ -57,7 +58,7 @@
 
                     <hr>
                     <strong><i class="fa fa-file-text-o margin-r-5"></i>Hakkinda</strong>
-                    <p th:text="${details.experience}">></p>
+                    <p th:text="${details.experience}"></p>
                 </div>
                 <!-- /.box-body -->
             </div>

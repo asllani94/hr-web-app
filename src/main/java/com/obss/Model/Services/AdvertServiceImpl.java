@@ -34,7 +34,7 @@ public class AdvertServiceImpl implements AdvertService {
 
     @Override
     public void createOrSaveAdvert(Advert advert) {
-        advertRepository.save(advert);
+        advertRepository.saveAndFlush(advert);
     }
 
     @Override
