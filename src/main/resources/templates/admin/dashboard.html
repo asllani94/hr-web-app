@@ -1,6 +1,6 @@
 <!DOCTYPE html  "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sd="http://www.thymeleaf.org/spring-data"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout_admin">
 <head>
     <title>Dashboard</title>
 </head>
@@ -17,7 +17,7 @@
             <!-- small box -->
             <div class="small-box bg-aqua">
                 <div class="inner">
-                    <h3>24,223</h3>
+                    <h3 th:text="${totalAdvert}"></h3>
 
                     <p>Ilanlar</p>
                 </div>
@@ -34,7 +34,7 @@
             <!-- small box -->
             <div class="small-box bg-yellow">
                 <div class="inner">
-                    <h3>44</h3>
+                    <h3 th:text="${totalAccount}"></h3>
 
                     <p>Kullanci Sayi</p>
                 </div>

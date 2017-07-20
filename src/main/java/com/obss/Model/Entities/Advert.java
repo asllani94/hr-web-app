@@ -18,7 +18,14 @@ public class Advert {
     @Column(name = "ad_code", updatable = false, nullable = false)
     private int adCode;
     private String adHeader;
+
+    @Lob
     private String adDescription;
+    @Lob
+    private String adQualifications;
+
+    private String adJobTitle;
+    private String adJobLocation;
     private Timestamp adActivationTime;
     private Timestamp adDeadlineTime;
     private boolean adStatus;
@@ -150,4 +157,27 @@ public class Advert {
     }
 
 
+    public String getAdQualifications() {
+        return adQualifications;
+    }
+
+    public void setAdQualifications(String adQualifications) {
+        this.adQualifications = adQualifications;
+    }
+
+    public String getAdJobTitle() {
+        return adJobTitle;
+    }
+
+    public void setAdJobTitle(String adJobTitle) {
+        this.adJobTitle = adJobTitle;
+    }
+
+    public String getAdJobLocation() {
+        return adJobLocation;
+    }
+
+    public void setAdJobLocation(String adJobLocation) {
+        this.adJobLocation = adJobLocation;
+    }
 }

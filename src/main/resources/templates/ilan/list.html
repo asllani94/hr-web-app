@@ -1,24 +1,24 @@
 <!DOCTYPE html  "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sd="http://www.thymeleaf.org/spring-data"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout_admin">
 <head>
-    <title>Basvurular</title>
+    <title>Tum Ilanlar</title>
 </head>
 <body>
 <section layout:fragment="header">
-    <h1>Basvurularim</h1>
+    <h1>Ilanlar</h1>
     <ol class="breadcrumb">
         <li><a href="/"><i class="fa fa-dashboard"></i> Anasayfa</a></li>
-        <li class="active">Basvurularim</li>
+        <li class="active">Tum Ilanlar</li>
     </ol>
 </section>
 <div layout:fragment="content">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-offset-1 col-md-10">
 
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Basvurularim</h3>
+                    <h3 class="box-title">Tum Ilanlar</h3>
 
                     <div class="box-tools">
                         <div class="input-group input-group-sm" style="width: 150px;">
@@ -37,23 +37,27 @@
                         <tr>
                             <th>Ilan Kodu</th>
                             <th>Ilan Basligi</th>
-                            <th>Basvuru tarihi</th>
+                            <th>Kapanma tarihi</th>
+                            <th>Yayin tarihi</th>
                             <th>Durum</th>
-                            <th>Islem</th>
+                            <th> Guncelle</th>
+                            <th> Sil</th>
                         </tr>
                         <tr th:each="listItem: ${list}">
                             <td th:text="${listItem.adCode}"></td>
                             <td th:text="${listItem.adHeader}"></td>
-                            <td>11-7-2014</td>
-                            <td th:switch="${listItem.status}">
-                                <span th:case="1" class="label label-primary">On Progress</span>
-                                <span th:case="2" class="label label-success">Approved</span>
-                                <span th:case="3" class="label label-warning">Rejected</span>
+                            <td th:text="${listItem.adDeadlineTime}"></td>
+                            <td th:text="${listItem.adActivationTime}"></td>
+                            <td th:if="${adStatus}">
+                                <button type="button" class="btn btn-block btn-success btn-xs">Activate</button>
                             </td>
-                            <td>
-                                <a th:href="${'/user/basvusu/delete/'+ listItem.adCode}"
-                                   class="btn btn-block btn-danger btn-xs">Geri cek</a>
+                            <td th:unless="${adStatus}">
+                                <button type="button" class="btn btn-block btn-warning btn-xs">Deactivate</button>
                             </td>
+                            <td><a th:href="${'/admin/ilan/'+ listItem.adCode +'/guncelle'}"
+                                   class="btn btn-block btn-primary btn-xs">Edit</a></td>
+                            <td><a th:href="${'/admin/ilan/'+ listItem.adCode +'/sil'}"
+                                   class="btn btn-block btn-danger btn-xs">Sil</a></td>
                         </tr>
 
                         </tbody>
@@ -61,7 +65,7 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer clearfix">
-                    <ul class="pagination pagination-md no-margin ">
+                    <ul class="pagination pagination-sm no-margin pull-right">
                         <li><a href="#">«</a></li>
                         <li><a href="#">1</a></li>
                         <li><a href="#">2</a></li>
@@ -78,7 +82,6 @@
 
         <!-- /.col -->
     </div>
-
 </div>
 </body>
 </html>

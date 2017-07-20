@@ -191,6 +191,8 @@ public class AccountTests {
 
         accountRepository.saveAndFlush(retrieved);
 
+        System.out.println("Total users: " + accountRepository.countAllAccount());
+
 
     }
 

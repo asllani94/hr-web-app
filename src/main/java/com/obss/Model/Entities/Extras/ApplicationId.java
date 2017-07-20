@@ -15,13 +15,10 @@ import java.io.Serializable;
 @Embeddable
 public  class ApplicationId implements Serializable {
 
-
     private Account account;
-
     private Advert advert;
 
     public ApplicationId() {
-
     }
     @ManyToOne
     public Account getAccount() {

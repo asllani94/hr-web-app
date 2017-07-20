@@ -4,7 +4,7 @@ import com.obss.Model.Entities.Account;
 import com.obss.Model.Entities.Application;
 import com.obss.Model.Entities.Extras.ApplicationDetails;
 import com.obss.Model.Entities.Extras.ApplicationStatus;
-import com.obss.Model.Entities.Extras.UiSkill;
+import com.obss.Model.Entities.Extras.SkillView;
 import com.obss.Model.Entities.Skill;
 import com.obss.Model.Repositories.AccountRepository;
 import com.obss.Model.Services.Interfaces.AccountService;
@@ -68,12 +68,17 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public ArrayList<UiSkill> getAccountSkillsForUI(Account account) {
-        ArrayList<UiSkill> list = new ArrayList<>();
+    public ArrayList<SkillView> getAccountSkillsForUI(Account account) {
+        ArrayList<SkillView> list = new ArrayList<>();
         for (Skill skill : account.getSkills()) {
-            UiSkill newUiSkill = new UiSkill(skill.getSkillId(), skill.getSkillName());
-            list.add(newUiSkill);
+            SkillView newSkillView = new SkillView(skill.getSkillId(), skill.getSkillName());
+            list.add(newSkillView);
         }
         return list;
+    }
+
+    @Override
+    public int getTotalAccounts() {
+        return accountRepository.countAllAccount();
     }
 }

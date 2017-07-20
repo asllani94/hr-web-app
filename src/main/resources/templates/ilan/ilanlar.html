@@ -13,30 +13,35 @@
     </ol>
 </section>
 <div layout:fragment="content">
-    <div class="box">
-        <div class="box-header with-border">
-            <h3 class="box-title">Ilanlar Listesi</h3>
+
+    <div class="row">
+        <div class=" col-md-offset-1 col-md-10">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Ilanlar Listesi</h3>
+                </div>
+                <div class="box-body no-padding">
+                    <ul class="timeline timeline-inverse">
+                        <li th:each="row : ${ad_list}">
+
+                            <i class="fa fa-suitcase bg-green"></i>
+                            <div class="timeline-item">
+                                <span class="time" th:text="@{'08/08/2017'}"><i class="fa fa-clock-o"></i></span>
+
+                                <h3 class="timeline-header"><a th:href="${'/ilan/'+ row.adCode}"
+                                                               th:text="${row.adHeader}"></a></h3>
+
+                                <div class="timeline-body" th:text="${row.adDescription}">
+
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+
+            </div>
         </div>
-        <div class="box-body no-padding">
-            <ul class="timeline timeline-inverse">
-                <li th:each="row : ${ad_list}">
-
-                    <i class="fa fa-suitcase bg-green"></i>
-                    <div class="timeline-item">
-                        <span class="time" th:text="@{'08/08/2017'}"><i class="fa fa-clock-o"></i></span>
-
-                        <h3 class="timeline-header"><a th:href="${'/advert/'+ row.adCode}"
-                                                       th:text="${row.adHeader}"></a></h3>
-
-                        <div class="timeline-body" th:text="${row.adDescription}">
-
-                        </div>
-                    </div>
-                </li>
-
-            </ul>
-        </div>
-
     </div>
 </div>
 </body>

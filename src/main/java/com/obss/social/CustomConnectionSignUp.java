@@ -79,23 +79,39 @@ public class CustomConnectionSignUp implements ConnectionSignUp {
     //only for testing
     private void populateDB(Account account) {
         Advert advert = new Advert();
-        advert.setAdHeader("Java developer araniyor");
+        advert.setAdHeader("Garson araniyor!!");
 
-        advert.setAdDescription("onemli degil");
+        advert.setAdDescription("ADAMAR A.Ş. Şubelerinde görevlendirilmek üzere\n" +
+                "GARSON & BARMEN & BARİSTA takım arkadaşları arıyoruz.");
         advert.setAdStatus(false);
         advert.setAdActivationTime(new Timestamp(5000));
         advert.setAdDeadlineTime(new Timestamp(5000));
+        advert.setAdJobTitle("Backend developer");
+        advert.setAdJobLocation("Pendik, Istanbul");
+        advert.setAdQualifications(" MYO mezunu yada en az Lise mezunu \n" +
+                "• En az 1 sene servis tecrübesine sahip\n" +
+                "• Vardiyalı sistemde çalışabilecek \n" +
+                "• Bay veya bayan \n" +
+                "• Takım çalışmasına yatkın \n" +
+                "• Güler yüzlü \n" +
+                "• Dış görünüşüne özen gösteren \n" +
+                "• İşini seven, hızlı, dinamik ve titiz \n" +
+                "• Esnek çalışma saatlerine ayak uydurabilecek \n" +
+                "• Müşteri memnuniyetini ilke edinmiş \n" +
+                "• Sektörde gelişmeyi ve kariyer yapmayı hedefleyen pozitif calışma arkadaşları arıyoruz. \n" +
+                "(Personel Lojmanımız Yoktur)");
+
 
         Advert advert1 = new Advert();
         advert1.setAdHeader("C++ developer araniyor");
 
-        advert1.setAdDescription("gagahah");
+        advert1.setAdDescription("This is a test advert created at run time");
         advert1.setAdStatus(false);
         advert1.setAdActivationTime(new Timestamp(5000));
         advert1.setAdDeadlineTime(new Timestamp(5000));
 
-        advertService.createOrSaveAdvert(advert);
-        advertService.createOrSaveAdvert(advert1);
+        advertService.createAdvert(advert);
+        advertService.createAdvert(advert1);
 
         account.applyToAdvert(advert);
         usersDao.createOrUpdateAccount(account);
