@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UserProfile;
+import org.springframework.social.linkedin.api.LinkedIn;
+import org.springframework.social.linkedin.api.LinkedInProfile;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
@@ -38,16 +40,17 @@ public class CustomConnectionSignUp implements ConnectionSignUp {
 
     public String execute(Connection<?> connection) {
        //LinkedIn template= (LinkedIn) connection.getApi();
-
         System.out.println("ConnectionSignUp called");
-
         UserProfile profile = connection.fetchUserProfile();
-      /*  LinkedInProfileFull full=template.profileOperations().getUserProfileFull();
+        String imagerUrl = connection.getImageUrl();
+
+        /*  LinkedInProfileFull full=template.profileOperations().getUserProfileFull();
         List<Company> companies=template.companyOperations().getFollowing();*/
 
         //Unique linkedin user id
         String email=profile.getEmail();
         Account user=new Account(email,profile.getFirstName(),profile.getLastName(),generateUserPassword());
+        user.setImageUrl(imagerUrl);
 
         //here we get extra info from LinkedIn API (using mock because not approved)
         AccountDetails accountDetails=new AccountDetails();
@@ -66,9 +69,7 @@ public class CustomConnectionSignUp implements ConnectionSignUp {
         user.addSkill(skill);
         user.addSkill(skill_1);
 
-
         populateDB(user);
-
         return email;
     }
     private String generateUserPassword(){

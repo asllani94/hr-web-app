@@ -45,7 +45,7 @@
                         </tr>
                         <tr th:each="listItem: ${list}">
                             <td th:text="${listItem.adCode}"></td>
-                            <td th:text="${listItem.adHeader}"></td>
+                            <td><a th:href="${'/admin/ilan/'+listItem.adCode}" th:text="${listItem.adHeader}"> </a></td>
                             <td th:text="${listItem.adDeadlineTime}"></td>
                             <td th:text="${listItem.adActivationTime}"></td>
                             <td th:if="${adStatus}">

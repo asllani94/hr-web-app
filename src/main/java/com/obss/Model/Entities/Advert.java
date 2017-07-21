@@ -1,9 +1,11 @@
 package com.obss.Model.Entities;
 
 import com.obss.Model.Entities.Extras.ApplicationStatus;
-import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
@@ -97,7 +99,6 @@ public class Advert {
     public void setAdStatus(boolean adStatus) {
         this.adStatus = adStatus;
     }
-
     public Set<Application> getApplications() {
         return accounts;
     }
@@ -105,7 +106,6 @@ public class Advert {
     public void setApplications(Set<Application> applications) {
         this.accounts = applications;
     }
-
     public void addAccount (Account account){
      Application application= new Application();
      application.setAccount(account);
@@ -180,4 +180,6 @@ public class Advert {
     public void setAdJobLocation(String adJobLocation) {
         this.adJobLocation = adJobLocation;
     }
+
+
 }

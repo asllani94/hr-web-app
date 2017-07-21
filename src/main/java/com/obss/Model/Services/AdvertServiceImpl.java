@@ -2,7 +2,10 @@ package com.obss.Model.Services;
 
 import com.obss.Controllers.Forms.AdvertForm;
 import com.obss.Model.Entities.Advert;
+import com.obss.Model.Entities.Application;
 import com.obss.Model.Entities.Extras.SkillView;
+import com.obss.Model.Entities.Extras.UserApplication;
+import com.obss.Model.Entities.Extras.UserApplicationComparator;
 import com.obss.Model.Entities.Skill;
 import com.obss.Model.Repositories.AdvertRepository;
 import com.obss.Model.Services.Interfaces.AdvertService;
@@ -11,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by arnold on 7/17/2017.
@@ -77,5 +82,28 @@ public class AdvertServiceImpl implements AdvertService {
         advert.setAdDeadlineTime(new Timestamp(555));
         advertRepository.save(advert);
 
+    }
+
+    @Override
+    public List<UserApplication> getCandidateApplications(int adCode) {
+        Advert advert = advertRepository.findOne(adCode);
+
+        ArrayList<UserApplication> list = new ArrayList<>();
+
+        for (Application app : advert.getApplications()) {
+
+            UserApplication newUserApp = new UserApplication();
+            newUserApp.setAccountId(app.getAccount().getAccountId());
+            newUserApp.setFullName(app.getAccount().getFirstName() + " " + app.getAccount().getLastName());
+            newUserApp.setImageUrl(app.getAccount().getImageUrl());
+            newUserApp.setSkills(app.getAccount().getSkills());
+
+            list.add(newUserApp);
+        }
+
+        Set<Skill> requiredSkills = advert.getSkills();
+        //sorts users according to their skills
+        list.sort(new UserApplicationComparator(requiredSkills));
+        return list;
     }
 }

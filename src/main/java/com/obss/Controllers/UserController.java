@@ -7,9 +7,11 @@ package com.obss.Controllers;
 
 import com.obss.Model.Entities.Account;
 import com.obss.Model.Entities.AccountDetails;
-import com.obss.Model.Entities.Extras.ApplicationDetails;
+import com.obss.Model.Entities.Extras.AdvertApplication;
 import com.obss.Model.Entities.Extras.SkillView;
+import com.obss.Model.Repositories.ApplicationRepository;
 import com.obss.Model.Services.AccountServiceImpl;
+import com.obss.Model.Services.ApplicationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 
@@ -28,8 +31,12 @@ public class UserController {
     private final AccountServiceImpl accountService;
 
     @Autowired
+    private ApplicationServiceImpl applicationService;
+
+    @Autowired
     public UserController(AccountServiceImpl accountService) {
         this.accountService = accountService;
+
     }
 
     @RequestMapping(value = {"/", "/user/welcome"})
@@ -82,11 +89,28 @@ public class UserController {
     public String userApplications(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
-        ArrayList<ApplicationDetails> list = accountService.getUserApplications(email);
+        ArrayList<AdvertApplication> list = accountService.getUserApplications(email);
 
         model.addAttribute("list", list);
 
         return "/user/basvurularim";
+
+    }
+
+    @RequestMapping(value = "/user/ilan/{ad_code}/apply")
+    public String userApply(@PathVariable("ad_code") int adCode, RedirectAttributes ra) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+
+        //accountService.applyToAdvert(adCode,email);
+        applicationService.newApplication(adCode, 1);
+
+
+        ra.addFlashAttribute("successFlash", "Ilana basvuruldu");
+
+        return "redirect:/user/basvurularim";
+
 
     }
 

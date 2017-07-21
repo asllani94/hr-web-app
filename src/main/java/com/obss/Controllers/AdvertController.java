@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.lang.reflect.Method;
@@ -49,18 +50,24 @@ public class AdvertController {
 
 
     @RequestMapping(value = "/ilan/yeni", method = RequestMethod.POST)
-    public String createNewAdvert(@Valid AdvertForm advertForm, BindingResult bindingResult) {
+    public String createNewAdvert(@Valid AdvertForm advertForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            return "/ilan/yeni";
+            redirectAttributes.addFlashAttribute("errorFlash", "Form cant have empty field!!");
+            return "redirect:/admin/ilan/yeni";
         }
 
-        if (advertForm.getAdCode() > 0)
+        if (advertForm.getAdCode() > 0) {
+
             advertService.updateAdvert(advertForm);
-        else
+            redirectAttributes.addFlashAttribute("successFlash", "Ilan guncelledi!");
+            return "redirect:/admin/ilan/ilanlar";
+        } else {
             advertService.createAdvert(advertForm.buildAdvert());
+            redirectAttributes.addFlashAttribute("successFlash", "Ilan olusturdu!");
+            return "redirect:/admin/ilan/ilanlar";
+        }
 
 
-        return "redirect:/ilan/all";
     }
 }

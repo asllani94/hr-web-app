@@ -2,6 +2,8 @@ package com.obss.Controllers;
 
 import com.obss.Controllers.Forms.AdvertForm;
 import com.obss.Model.Entities.Advert;
+import com.obss.Model.Entities.Application;
+import com.obss.Model.Entities.Extras.UserApplication;
 import com.obss.Model.Services.Interfaces.AccountService;
 import com.obss.Model.Services.Interfaces.AdvertService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by arnold on 7/11/2017.
@@ -42,6 +46,15 @@ public class AdminController {
         return "/ilan/list";
     }
 
+    @RequestMapping(value = {"/admin/ilan/{ad_code}"})
+    public String adminAdvertInfo(@PathVariable(value = "ad_code") int adCode, Model model) {
+
+        List<UserApplication> orderedCandidates = advertService.getCandidateApplications(adCode);
+        model.addAttribute("adCode", adCode);
+        model.addAttribute("list", orderedCandidates);
+        return "/ilan/application_list";
+    }
+
 
     @RequestMapping(value = {"/admin/ilan/yeni"})
     public String adminAdvertCreate(Model model) {
@@ -53,21 +66,18 @@ public class AdminController {
 
     @RequestMapping(value = {"/admin/ilan/{ad_code}/guncelle"})
     public String adminAdvertUpdate(@PathVariable(value = "ad_code") int adCode, Model model) {
-
         AdvertForm advertForm = new AdvertForm();
         populateForm(advertForm, adCode);
         advertForm.setUpdate(true);
         model.addAttribute("advertForm", advertForm);
-
         return "/ilan/yeni";
     }
 
     @RequestMapping(value = {"/admin/ilan/{ad_code}/sil"})
-    public String adminAdvertDelete(@PathVariable(value = "ad_code") int adCode) {
+    public String adminAdvertDelete(@PathVariable(value = "ad_code") int adCode, RedirectAttributes redirectAttributes) {
         advertService.deleteAdvert(adCode);
-
-
-        return "/extra/success";
+        redirectAttributes.addFlashAttribute("successFlash", "Ilan silindi!");
+        return "redirect:/ilan/ilanlar";
     }
 
 

@@ -4,6 +4,7 @@ import com.obss.Controllers.Forms.AdvertForm;
 import com.obss.Model.Entities.Account;
 import com.obss.Model.Entities.Advert;
 import com.obss.Model.Entities.Extras.SkillView;
+import com.obss.Model.Entities.Extras.UserApplication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,6 +30,8 @@ public interface AdvertService {
     public int getTotalAdverts();
 
     public void updateAdvert(AdvertForm advertForm);
+
+    public List<UserApplication> getCandidateApplications(int adCode);
 
 
 }

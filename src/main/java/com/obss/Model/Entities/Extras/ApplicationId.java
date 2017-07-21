@@ -40,23 +40,21 @@ public  class ApplicationId implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this== o) return true;
-        if (o ==null|| getClass() != o.getClass()) return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         ApplicationId that = (ApplicationId) o;
 
-        if (account !=null?!account.equals(that.account) : that.account !=null) return false;
-        if (advert !=null?!advert.equals(that.advert) : that.advert !=null)
-            return false;
+        if (this.advert.getAdCode() != that.advert.getAdCode()) return false;
+        if (this.account.getAccountId() != that.account.getAccountId()) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result;
-        result = (account !=null? account.hashCode() : 0);
-        result =31* result + (advert !=null? advert.hashCode() : 0);
+        int result = this.advert.getAdCode();
+        result = 31 * result + this.account.getAccountId();
         return result;
     }
 }

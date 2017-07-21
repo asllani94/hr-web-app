@@ -22,6 +22,7 @@ public class Account   {
     private String firstName;
     private String lastName;
     private String password;
+    private String imageUrl;
 
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "user_detail_id")
@@ -181,4 +182,14 @@ public class Account   {
         if(skills!=null)
             skills.remove(skill);
     }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+
 }

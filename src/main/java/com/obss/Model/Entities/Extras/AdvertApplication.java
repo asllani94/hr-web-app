@@ -6,7 +6,7 @@ import java.security.Timestamp;
  * Created by arnold on 7/18/2017.
  * This class is not an entity. Its only a class used to populate application list in the view.
  */
-public class ApplicationDetails {
+public class AdvertApplication {
     private int adCode;
     private String adHeader;
     private Timestamp applicationTime;

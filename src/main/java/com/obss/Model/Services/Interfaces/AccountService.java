@@ -1,7 +1,8 @@
 package com.obss.Model.Services.Interfaces;
 
 import com.obss.Model.Entities.Account;
-import com.obss.Model.Entities.Extras.ApplicationDetails;
+import com.obss.Model.Entities.Advert;
+import com.obss.Model.Entities.Extras.AdvertApplication;
 import com.obss.Model.Entities.Extras.SkillView;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +23,13 @@ public interface AccountService {
 
     public List<Account> loadAllAccounts();
 
-    public ArrayList<ApplicationDetails> getUserApplications(String email);
+    public ArrayList<AdvertApplication> getUserApplications(String email);
 
     public List<SkillView> getAccountSkillsForUI(Account account);
 
     public int getTotalAccounts();
+
+    public void applyToAdvert(int adCode, String email);
+
 
 }
