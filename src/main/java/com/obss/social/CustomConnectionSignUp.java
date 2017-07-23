@@ -11,6 +11,7 @@ import com.obss.Model.Services.AccountServiceImpl;
 import com.obss.Model.Entities.Account;
 import com.obss.Model.Entities.AccountDetails;
 import com.obss.Model.Services.AdvertServiceImpl;
+import com.obss.Utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
@@ -20,6 +21,7 @@ import org.springframework.social.linkedin.api.LinkedInProfile;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.UUID;
 
 @Component
@@ -108,13 +110,22 @@ public class CustomConnectionSignUp implements ConnectionSignUp {
 
         advert1.setAdDescription("This is a test advert created at run time");
         advert1.setAdStatus(false);
-        advert1.setAdActivationTime(new Timestamp(5000));
-        advert1.setAdDeadlineTime(new Timestamp(5000));
+
+        try {
+            advert1.setAdActivationTime(DateUtil.getCurrentTimestamp());
+            advert1.setAdDeadlineTime(DateUtil.getTimestampFromDate("07/28/2017"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         advertService.createAdvert(advert);
         advertService.createAdvert(advert1);
 
-        account.applyToAdvert(advert);
+        try {
+            account.applyToAdvert(advert);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         usersDao.createOrUpdateAccount(account);
 
     }

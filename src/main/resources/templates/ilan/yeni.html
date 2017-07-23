@@ -2,17 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sd="http://www.thymeleaf.org/spring-data"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout_admin">
 <head>
-    <title th:if="${advertForm.update}"> Ilan Guncelleme</title>
-    <title th:unless="${advertForm.update}"> Yeni Ilan</title>
+    <title th:if="${advertForm.update}"> İlan güncelleme</title>
+    <title th:unless="${advertForm.update}"> Yeni İlan</title>
 </head>
 <body>
 <section layout:fragment="header">
-    <h1 th:if="${advertForm.update}">Ilan Guncelleme </h1>
-    <h1 th:unless="${advertForm.update}">Yeni Ilan </h1>
+    <h1 th:if="${advertForm.update}">İlan güncelleme </h1>
+    <h1 th:unless="${advertForm.update}">Yeni İlan </h1>
     <ol class="breadcrumb">
         <li><a href="/"><i class="fa fa-dashboard"></i> Anasayfa</a></li>
-        <li th:if="${advertForm.update}" class="active">Ilan Guncelleme</li>
-        <li th:unless="${advertForm.update}" class="active">Yeni Ilan</li>
+        <li th:if="${advertForm.update}" class="active">İlan güncelleme</li>
+        <li th:unless="${advertForm.update}" class="active">Yeni İlan</li>
     </ol>
 </section>
 <div layout:fragment="content">
@@ -21,8 +21,8 @@
             <div class="box box-primary">
                 <div class="box-header">
 
-                    <h3 class="box-title" th:if="${advertForm.update}">Ilani Guncelle</h3>
-                    <h3 class="box-title" th:unless="${advertForm.update}">Ilan Olustur</h3>
+                    <h3 class="box-title" th:if="${advertForm.update}">İlanı güncelle</h3>
+                    <h3 class="box-title" th:unless="${advertForm.update}">İlan oluştur</h3>
                 </div>
                 <div class="box-body">
                     <div class="row">
@@ -30,20 +30,20 @@
                             <form id="advertForm" action="#" th:action="@{/ilan/yeni}" th:object="${advertForm}"
                                   method="post">
                                 <div class="form-group">
-                                    <label for="adHead">Ilan Basligi</label>
+                                    <label for="adHead">İlan Başlığı</label>
                                     <input type="text" th:field="*{adHead}" th:text="${adHead}" id="adHead"
-                                           class="form-control" placeholder="Ilan Basligi" autocomplete="off">
+                                           class="form-control" placeholder="İlan Başlığı" autocomplete="off">
                                 </div>
                                 <div class="form-group">
-                                    <label>Job Title</label>
+                                    <label>Is Unvani</label>
                                     <input type="text" th:field="*{adTitle}" th:text="${adTitle}" id="adTitle"
-                                           class="form-control" placeholder="Software Developer, Nurse, etc"
+                                           class="form-control" placeholder="Software Developer, etc"
                                            autocomplete="off">
                                 </div>
                                 <div class="form-group">
-                                    <label for="adAddress">Konum</label>
+                                    <label for="adAddress">Adres</label>
                                     <input type="text" th:field="*{adAddress}" th:text="${adAddress}" id="adAddress"
-                                           class="form-control" placeholder="Address" autocomplete="off">
+                                           class="form-control" placeholder="Adres" autocomplete="off">
                                 </div>
                                 <div class="form-group">
                                     <label>Is Tanimi</label>
@@ -52,7 +52,7 @@
                                               placeholder="Describe job here.."></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label>Arinan Nitelikler</label>
+                                    <label>Arınan Nitelikler</label>
                                     <textarea class="form-control" th:field="*{adQualification}"
                                               th:value="${adQualification}" id="adQualification" rows="3"
                                               placeholder="-Should have 3 years of experience.."></textarea>
@@ -61,7 +61,7 @@
                                 <div class="row form-group">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Yayin tarihi:</label>
+                                            <label>Yayınlama Tarihi:</label>
                                             <div class="input-group date">
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-calendar"></i>
@@ -74,7 +74,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Kapanma tarihi:</label>
+                                            <label>Son Başvuru Tarihi:</label>
                                             <div class="input-group date">
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-calendar"></i>
@@ -86,6 +86,30 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label>Yetenekler</label>
+                                    <select th:unless="${advertForm.update}" th:field="*{skillList}" aria-hidden="true"
+                                            class="form-control select2 select2-hidden-accessible"
+                                            data-placeholder="Ozellikleri sec" multiple="" style="width: 100%;"
+                                            tabindex="-1">
+                                        <option th:each="skillItem:${list}"
+                                                th:value="${skillItem.skillId}"
+                                                th:text="${skillItem.skillName}">
+                                        </option>
+
+                                    </select>
+                                    <select th:if="${advertForm.update}" th:field="*{skillList}" aria-hidden="true"
+                                            class="form-control select2 select2-hidden-accessible"
+                                            data-placeholder="Ozellikleri sec" multiple="" style="width: 100%;"
+                                            tabindex="-1">
+                                        <option th:each="skillItem:${list}"
+                                                th:value="${skillItem.skillId}"
+                                                th:text="${skillItem.skillName}"
+                                                th:selected="${advertForm.skillList.contains(skillItem)}">
+                                        </option>
+
+                                    </select>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -94,11 +118,11 @@
                 <div class="box-footer">
                     <div class="col-xs-12">
                         <a href="invoice-print.html" target="_blank" class="btn btn-warning "
-                           style="margin-left:180px;"><i class="fa fa-print"></i>Clear</a>
+                           style="margin-left:180px;"><i class="fa fa-print"></i>Temizle</a>
 
                         <button id="adSaveBtn" th:if="${advertForm.update}" type="submit"
                                 class="btn btn-primary  pull-right" style="margin-right: 180px;">
-                            <i class="fa fa-download"></i>Guncelle
+                            <i class="fa fa-download"></i>Güncelle
                         </button>
                         <button id="adSaveBtn" th:unless="${advertForm.update}" type="submit"
                                 class="btn btn-primary  pull-right" style="margin-right: 180px;">

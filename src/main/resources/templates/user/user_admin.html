@@ -1,0 +1,125 @@
+<!DOCTYPE html  "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sd="http://www.thymeleaf.org/spring-data"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+<head>
+    <title>Aday Profili</title>
+</head>
+<body>
+<section layout:fragment="header">
+    <h1>Aday Profili</h1>
+    <ol class="breadcrumb">
+        <li><a href="/"><i class="fa fa-dashboard"></i> Anasayfa</a></li>
+        <li class="active">Aday Profili</li>
+    </ol>
+</section>
+<div layout:fragment="content">
+    <div class="row">
+        <div class="col-md-7">
+
+            <!-- Profile Image -->
+            <div class="box box-primary">
+                <div class="box-header">
+                    <div class="box-tools">
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                            <a class="btn btn-block btn-danger btn-xs" href="/admin/user/1/blacklist">Kara Listele</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box-body box-profile">
+                    <img class="profile-user-img img-responsive img-circle"
+                         src="https://media.licdn.com/mpr/mprx/0_ilLA5atP-ybkK3r6EhgxmM4Pc0JLKlCFGPjA8VzP9Z5kK3_VWhgKDMNtrZbM13lV2hjKepc-RRXXnz-FEGhDSVsOYRX5nzFofGh-QR71vVAdyipn_Pny67TGOmOv0zKRQTkj35hPQcx"
+                         alt="User profile picture">
+                    <h3 class="profile-username text-center" th:text="${account.firstName+ ' '+ account.lastName}"></h3>
+                    <p class="text-muted text-center" th:text="${details.title}"></p>
+                </div>
+
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+
+            <!-- About Me Box -->
+            <div class="box box-primary">
+                <div class="box-header with-border text-center ">
+                    <h3 class="box-title">Hakkinda</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <strong><i class="fa fa-book margin-r-5"></i>Egitim</strong>
+
+                    <p class="text-muted" th:text="${details.education}">
+                    </p>
+                    <hr>
+                    <strong><i class="fa fa-map-marker margin-r-5"></i>Adres</strong>
+                    <p class="text-muted" th:text="${details.address}"></p>
+                    <hr>
+                    <strong><i class="fa fa-pencil margin-r-5"></i> Yetenekler</strong>
+                    <p>
+                        <span th:each="skill : ${skills}" th:class="${'label label-'+ skill.colorCode}"
+                              th:text="${skill.skillName}">
+                        </span>
+                    </p>
+                    <hr>
+                    <strong><i class="fa fa-file-text-o margin-r-5"></i>Deneyimler</strong>
+                    <p th:text="${details.experience}"></p>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+
+        <div class="col-md-5">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Başvurdu Ilanlar</h3>
+
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr>
+                            <th>Ilan Kodu</th>
+                            <th>Ilan Basligi</th>
+                            <th>Başvuru Tarihi</th>
+                            <th>Durum</th>
+                        </tr>
+                        <tr th:each="listItem: ${list}">
+                            <td th:text="${listItem.adCode}"></td>
+                            <td><a th:href="${'/ilan/'+listItem.adCode}" th:text="${listItem.adHeader}"></a></td>
+                            <td th:text="${listItem.applicationTime}"></td>
+                            <td th:switch="${listItem.status}">
+                                <span th:case="1" class="label label-primary">Onay Bekliyor</span>
+                                <span th:case="2" class="label label-success">Onaylandi</span>
+                                <span th:case="3" class="label label-warning">Red edildi</span>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer clearfix">
+                    <ul class="pagination pagination-md no-margin ">
+                        <li><a href="#"><<</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">>></a></li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+
+
+</div>
+</body>
+</html>

@@ -2,9 +2,11 @@ package com.obss.Model.Entities;
 
 import com.obss.Model.Entities.Extras.ApplicationId;
 import com.obss.Model.Entities.Extras.ApplicationStatus;
+import com.obss.Utils.DateUtil;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -109,13 +111,14 @@ public class Account   {
         this.adverts = applications;
     }
 
-    public void applyToAdvert(Advert advert){
+    public void applyToAdvert(Advert advert) throws ParseException {
       Application application=new Application();
-        ApplicationId key=new ApplicationId();
+        ApplicationId key = new ApplicationId();
         key.setAccount(this);
         key.setAdvert(advert);
-      application.setPk(key);
+        application.setPk(key);
       application.setStatus(ApplicationStatus.ON_PROCESS);
+        application.setApplicationDate(DateUtil.getCurrentTimestamp());
       if(adverts==null)
           adverts=new HashSet<>();
 
@@ -133,7 +136,6 @@ public class Account   {
         }
 
     }
-
 
 
     public AccountDetails getAccountDetails() {

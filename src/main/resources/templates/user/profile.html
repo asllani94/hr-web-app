@@ -2,11 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sd="http://www.thymeleaf.org/spring-data"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
 <head>
-    <title>Kullanci Profili</title>
+    <title>Profil</title>
 </head>
 <body>
 <section layout:fragment="header">
-    <h1>Clientes</h1>
+    <h1>Profil</h1>
     <ol class="breadcrumb">
         <li><a href="/"><i class="fa fa-dashboard"></i> Anasayfa</a></li>
         <li class="active">Profil</li>
@@ -33,11 +33,11 @@
             <!-- About Me Box -->
             <div class="box box-primary">
                 <div class="box-header with-border text-center ">
-                    <h3 class="box-title">Hakkinda</h3>
+                    <h3 class="box-title">Hakkında</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <strong><i class="fa fa-book margin-r-5"></i>Egitim</strong>
+                    <strong><i class="fa fa-book margin-r-5"></i>Eğitim</strong>
 
                     <p class="text-muted" th:text="${details.education}">
                     </p>
@@ -45,14 +45,14 @@
                     <strong><i class="fa fa-map-marker margin-r-5"></i>Adres</strong>
                     <p class="text-muted" th:text="${details.address}"></p>
                     <hr>
-                    <strong><i class="fa fa-pencil margin-r-5"></i> Skills</strong>
+                    <strong><i class="fa fa-pencil margin-r-5"></i> Yetenekler</strong>
                     <p>
                         <span th:each="skill : ${skills}" th:class="${'label label-'+ skill.colorCode}"
                               th:text="${skill.skillName}">
                         </span>
                     </p>
                     <hr>
-                    <strong><i class="fa fa-file-text-o margin-r-5"></i>Hakkinda</strong>
+                    <strong><i class="fa fa-file-text-o margin-r-5"></i>Deneyimler</strong>
                     <p th:text="${details.experience}"></p>
                 </div>
                 <!-- /.box-body -->

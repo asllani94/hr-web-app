@@ -1,9 +1,12 @@
 package com.obss.Model.Entities;
 
 import com.obss.Model.Entities.Extras.ApplicationId;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Time;
+import java.sql.Timestamp;
 
 /**
  * Created by arnold on 7/13/2017.
@@ -20,6 +23,11 @@ public class Application  implements Serializable {
     private ApplicationId pk=new ApplicationId();
     @Column(name = "status")
     private int status;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "application_date", columnDefinition = "")
+    private Timestamp applicationDate;
 
     public Application() {
     }
@@ -58,6 +66,14 @@ public class Application  implements Serializable {
 
     public void setAdvert(Advert advert){
         this.pk.setAdvert(advert);
+    }
+
+    public Timestamp getApplicationDate() {
+        return applicationDate;
+    }
+
+    public void setApplicationDate(Timestamp applicationDate) {
+        this.applicationDate = applicationDate;
     }
 
 

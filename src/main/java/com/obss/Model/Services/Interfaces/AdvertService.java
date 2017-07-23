@@ -33,5 +33,7 @@ public interface AdvertService {
 
     public List<UserApplication> getCandidateApplications(int adCode);
 
+    public void activateAdvert(int adCode);
 
+    public void deactivateAdvert(int adCode);
 }

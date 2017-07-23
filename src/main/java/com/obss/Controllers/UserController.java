@@ -8,6 +8,7 @@ package com.obss.Controllers;
 import com.obss.Model.Entities.Account;
 import com.obss.Model.Entities.AccountDetails;
 import com.obss.Model.Entities.Extras.AdvertApplication;
+import com.obss.Model.Entities.Extras.ApplicationStatus;
 import com.obss.Model.Entities.Extras.SkillView;
 import com.obss.Model.Repositories.ApplicationRepository;
 import com.obss.Model.Services.AccountServiceImpl;
@@ -39,16 +40,25 @@ public class UserController {
 
     }
 
-    @RequestMapping(value = {"/", "/user/welcome"})
-    public String userWelcomePage() {
+    @RequestMapping(value = {"/", "/ilan/all"})
+    public String userWelcomePage(RedirectAttributes redirectAttributes) {
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if(isAdmin(auth)){
+        if (isAdmin()) {
             //Current logged user has admin authority so we need to redirect it
             return "redirect: /admin/dashboard";
+        } else if (isRegistered()) {
+            //send redirect attribute
+            return "redirect:/ilan/all";
         }
+
         return "redirect:/ilan/all";
+
+    }
+
+    private boolean isRegistered() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return true;
     }
 
     @RequestMapping(value = "/user/{account_id}")
@@ -78,7 +88,7 @@ public class UserController {
         model.addAttribute("account", account);
         model.addAttribute("details", details);
         model.addAttribute("skills", skills);
-        model.addAttribute("isAdmin", true);
+        //  model.addAttribute("isAdmin", true);
         return "/user/profile";
 
 
@@ -90,31 +100,41 @@ public class UserController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         ArrayList<AdvertApplication> list = accountService.getUserApplications(email);
-
-        model.addAttribute("list", list);
-
-        return "/user/basvurularim";
+        if (list.size() > 0) {
+            model.addAttribute("list", list);
+            return "/user/basvurularim";
+        } else
+            return "/notfound";
 
     }
 
     @RequestMapping(value = "/user/ilan/{ad_code}/apply")
     public String userApply(@PathVariable("ad_code") int adCode, RedirectAttributes ra) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        applicationService.newApplication(adCode, accountService.getUserIdByEmail(email));
+        ra.addFlashAttribute("successFlash", "İlana başvurdunuz!");
+        return "redirect:/user/basvurularim";
+    }
+
+    @RequestMapping(value = "/user/ilan/{ad_code}/cancel")
+    public String userCancelApplication(@PathVariable("ad_code") int adCode, RedirectAttributes ra) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
 
+        int accoundId = accountService.getUserIdByEmail(email);
         //accountService.applyToAdvert(adCode,email);
-        applicationService.newApplication(adCode, 1);
-
-
-        ra.addFlashAttribute("successFlash", "Ilana basvuruldu");
+        applicationService.deleteApplicationByAccountIdAndAdCode(adCode, accoundId);
+        ra.addFlashAttribute("successFlash", "Başvurunuz geri çekildi!");
 
         return "redirect:/user/basvurularim";
 
 
     }
 
-    private boolean isAdmin(Authentication auth){
+    private boolean isAdmin() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         for (GrantedAuthority authority:auth.getAuthorities()){
             if(authority.getAuthority().equals("ROLE_ADMIN"))
                     return true;

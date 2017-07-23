@@ -2,28 +2,30 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sd="http://www.thymeleaf.org/spring-data"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout_admin">
 <head>
-    <title>Basvuranlar</title>
+    <title>Başvuranlar</title>
 </head>
 <body>
 <section layout:fragment="header">
     <h1>Basvuranlar</h1>
     <ol class="breadcrumb">
         <li><a href="/"><i class="fa fa-dashboard"></i> Anasayfa</a></li>
-        <li class="active">Basvuranlar</li>
+        <li class="active">Başvuranlar</li>
     </ol>
 </section>
 <div layout:fragment="content">
     <div class="row">
         <div class=" col-md-offset-1 col-md-10">
+            <a th:href="@{/admin/ilan/ilanlar}" class="btn btn-info"><i class="fa fa-server"></i> Tüm Ilanlar
+            </a>
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Basvuranlar</h3>
+                    <h3 class="box-title">Başvuranlar</h3>
 
                     <div class="box-tools">
                         <div class="box-tools">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-default btn-filter btn-xs" data-target="all">Tüm
-                                    Basvurular
+                                    Başvuranlar
                                 </button>
                                 <button type="button" class="btn btn-success btn-filter btn-xs" data-target="onaylanan">
                                     Onaylanmış
@@ -44,15 +46,15 @@
                         <tbody>
                         <tr>
                             <th>Aday</th>
-                            <th>Basvuru Tarihi</th>
+                            <th>Başvuru Tarihi</th>
                             <th>Durum</th>
                             <th></th>
                             <th></th>
 
                         </tr>
-                        <tr data-status="onaylanan" th:each="listItem:${list}">
+                        <tr th:each="listItem:${list}" th:attr="data-status=${listItem.filterTag}">
                             <td>
-                                <a href="#" class="pull-left">
+                                <a th:href="${'/admin/user/'+listItem.accountId}" class="pull-left">
                                     <img th:src="${listItem.imageUrl}" class="img-rounded img-responsive">
                                     <p class="h4 text-info" th:text="${listItem.fullName}"></p>
                                 </a>
@@ -62,21 +64,34 @@
                                 <br>
                                 <span th:text="${listItem.applicationDate}"><i class="fa fa-calendar"></i></span>
                             </td>
-                            <td>
+                            <td th:switch="${listItem.status}">
                                 <br>
                                 <br>
-
-                                <span class="label label-warning">Onay Bekliyor</span>
+                                <span th:case="1" class="label label-warning">Onay Bekliyor</span>
+                                <span th:case="2" class="label label-success">Onaylandi</span>
+                                <span th:case="3" class="label label-danger">Red edildi</span>
                             </td>
-                            <td>
+                            <td th:switch="${listItem.status}">
                                 <br>
                                 <br>
-                                <a href="asdf" class="btn btn-block btn-success btn-xs">Onayla</a>
+                                <a th:case="1"
+                                   th:href="${'/admin/ilan/'+listItem.adCode+'/user/'+listItem.accountId+'/accept'}"
+                                   class="btn btn-block btn-success btn-xs">Onayla</a>
+                                <a th:case="2" href="#" class="btn btn-block btn-success btn-xs disabled">Onayla</a>
+                                <a th:case="3"
+                                   th:href="${'/admin/ilan/'+listItem.adCode+'/user/'+listItem.accountId+'/accept'}"
+                                   class="btn btn-block btn-success btn-xs">Onayla</a>
                             </td>
-                            <td>
+                            <td th:switch="${listItem.status}">
                                 <br>
                                 <br>
-                                <a href="" class="btn btn-block btn-danger btn-xs disabled">Red Et</a>
+                                <a th:case="1"
+                                   th:href="${'/admin/ilan/'+listItem.adCode+'/user/'+listItem.accountId+'/reject'}"
+                                   class="btn btn-block btn-danger btn-xs ">Red Et</a>
+                                <a th:case="2"
+                                   th:href="${'/admin/ilan/'+listItem.adCode+'/user/'+listItem.accountId+'/reject'}"
+                                   class="btn btn-block btn-danger btn-xs ">Red Et</a>
+                                <a th:case="3" href="#" class="btn btn-block btn-danger btn-xs disabled">Red Et</a>
                             </td>
                         </tr>
 

@@ -1,6 +1,7 @@
 package com.obss.Model.Entities;
 
 import com.obss.Model.Entities.Extras.ApplicationStatus;
+import com.obss.Utils.DateUtil;
 import org.hibernate.annotations.*;
 
 import javax.persistence.*;
@@ -181,5 +182,12 @@ public class Advert {
         this.adJobLocation = adJobLocation;
     }
 
+    public String getStringActivationTime() {
+        return DateUtil.getDateFromTimestamp(this.adActivationTime);
+    }
+
+    public String getStringDeadlineTime() {
+        return DateUtil.getDateFromTimestamp(this.adDeadlineTime);
+    }
 
 }

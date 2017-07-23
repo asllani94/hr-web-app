@@ -17,10 +17,11 @@
     <link rel="stylesheet" th:href="@{/dist/css/AdminLTE.min.css}"/>
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
+
     <link rel="stylesheet" th:href="@{/plugins/iCheck/square/blue.css}"/>
-
-
+    <link rel="stylesheet" th:href="@{/plugins/select2/dist/css/select2.min.css}">
     <link rel="stylesheet" th:href="@{/dist/css/skins/skin-blue.min.css}">
+
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -48,7 +49,7 @@
             <!-- search form -->
             <form action="#" method="get" class="sidebar-form" _lpchecked="1">
                 <div class="input-group">
-                    <input type="text" name="q" class="form-control" placeholder="Search...">
+                    <input type="text" name="q" class="form-control" placeholder="Arama...">
                     <span class="input-group-btn">
                 <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
                 </button>
@@ -58,18 +59,18 @@
             <!-- /.search form -->
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu tree" data-widget="tree">
-                <li class="header">MAIN NAVIGATION</li>
+                <li class="header">ANA MENU</li>
                 <li><a href="/admin/dashboard"><i class="fa fa-book"></i> <span>Anasayfa</span></a></li>
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-dashboard"></i> <span>Ilan Yonetimi</span>
+                        <i class="fa fa-dashboard"></i> <span>İlan Yönetimi</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
                     </a>
                     <ul class="treeview-menu" style="display: none;">
                         <li><a href="/admin/ilan/ilanlar"><i class="fa fa-circle-o"></i> Tum Ilanlar</a></li>
-                        <li><a href="/admin/ilan/yeni"><i class="fa fa-circle-o"></i> Yeni Ilan</a></li>
+                        <li><a href="/admin/ilan/yeni"><i class="fa fa-circle-o"></i> Yeni İlan</a></li>
                     </ul>
                 </li>
 
@@ -107,11 +108,14 @@
     <!-- /.content-wrapper -->
 
     <footer class="main-footer">
-        <div class="pull-right hidden-xs">
-            <b>Version</b> 2.4.0
+        <div class="container">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 2.4.0
+            </div>
+            <strong>Copyright &copy; 2017 .</strong> All rights
+            reserved to Arnold Asllani
         </div>
-        <strong>Copyright © 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
-        reserved.
+        <!-- /.container -->
     </footer>
 
 </div>
@@ -130,7 +134,10 @@
 <!-- AdminLTE for demo purposes -->
 <script th:src="@{/dist/js/demo.js}"></script>
 
+<!-- Datepicker plugin -->
 <script th:src="@{/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js}"></script>
+<!-- multiple selec -->
+<script th:src="@{/plugins/select2/dist/js/select2.full.min.js}"></script>
 
 <script>
     $("#adSaveBtn").click(function () {
@@ -145,6 +152,21 @@
     $('#datepicker2').datepicker({
         autoclose: true
     })
+
+    $('.select2').select2()
+
+
+    $('.btn-filter').on('click', function () {
+        var $target = $(this).data('target');
+        if ($target != 'all') {
+            $('.table tr').css('display', 'none');
+            $('.table tr[data-status="' + $target + '"]').fadeIn('slow');
+        } else {
+            $('.table tr').css('display', 'none').fadeIn('slow');
+        }
+    })
+
+
 </script>
 
 </body>

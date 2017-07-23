@@ -73,9 +73,9 @@ public class AppSuccessHandler
             }
         }
         if (isUser) {
-            return "/user/welcome";
+            return "/ilan/all";
         } else if (isAdmin) {
-            return "/admin/dashboard";
+            return "/admin/dashboard/";
         } else {
             throw new IllegalStateException();
         }

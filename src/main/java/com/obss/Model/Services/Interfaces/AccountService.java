@@ -25,11 +25,15 @@ public interface AccountService {
 
     public ArrayList<AdvertApplication> getUserApplications(String email);
 
+    public ArrayList<AdvertApplication> getUserApplications(int accountId);
     public List<SkillView> getAccountSkillsForUI(Account account);
 
     public int getTotalAccounts();
 
     public void applyToAdvert(int adCode, String email);
 
+    public int getUserIdByEmail(String email);
+
+    public boolean hasAlreadyApplied(int adCode, String email);
 
 }

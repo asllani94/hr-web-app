@@ -2,13 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sd="http://www.thymeleaf.org/spring-data"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout_admin">
 <head>
-    <title>Dashboard</title>
+    <title>Anasayfa</title>
 </head>
 <body>
 <section layout:fragment="header">
-    <h1>Dashboard</h1>
+    <h1>Anasayfa</h1>
     <ol class="breadcrumb">
-        <li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+        <li><a href="/"><i class="fa fa-dashboard"></i> Anasayfa</a></li>
     </ol>
 </section>
 <div layout:fragment="content">
@@ -19,12 +19,13 @@
                 <div class="inner">
                     <h3 th:text="${totalAdvert}"></h3>
 
-                    <p>Ilanlar</p>
+                    <p>İlanlar Sayı</p>
                 </div>
                 <div class="icon">
                     <i class="ion ion-easel"></i>
                 </div>
-                <a href="/ilan/all" class="small-box-footer">Tum Ilanlar <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="/admin/ilan/ilanlar" class="small-box-footer">Tüm İlanlar <i
+                        class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->
@@ -36,12 +37,12 @@
                 <div class="inner">
                     <h3 th:text="${totalAccount}"></h3>
 
-                    <p>Kullanci Sayi</p>
+                    <p>Kullanıcı Sayı</p>
                 </div>
                 <div class="icon">
                     <i class="ion ion-person-add"></i>
                 </div>
-                <a href="/user/all" class="small-box-footer">Tum Kullancilar <i
+                <a href="/user/all" class="small-box-footer">Tüm Kullanıcılar <i
                         class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
@@ -57,7 +58,7 @@
                 <div class="icon">
                     <i class="ion ion-pie-graph"></i>
                 </div>
-                <a href="#" class="small-box-footer">Tum Basvurular <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="#" class="small-box-footer">Toplam Başvuru Sayı <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <!-- ./col -->

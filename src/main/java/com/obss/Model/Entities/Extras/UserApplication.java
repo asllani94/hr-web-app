@@ -12,11 +12,21 @@ import java.util.Set;
 public class UserApplication {
 
     private int accountId;
+    private int adCode;
     private String fullName;
     private String imageUrl;
     private int status;
-    private Timestamp applicationDate;
+    private String applicationDate;
+    private String filterTag;
     private Set<Skill> skills;
+
+    public int getAdCode() {
+        return adCode;
+    }
+
+    public void setAdCode(int adCode) {
+        this.adCode = adCode;
+    }
 
     public int getAccountId() {
         return accountId;
@@ -51,11 +61,11 @@ public class UserApplication {
         this.status = status;
     }
 
-    public Timestamp getApplicationDate() {
+    public String getApplicationDate() {
         return applicationDate;
     }
 
-    public void setApplicationDate(Timestamp applicationDate) {
+    public void setApplicationDate(String applicationDate) {
         this.applicationDate = applicationDate;
     }
 
@@ -67,4 +77,11 @@ public class UserApplication {
         this.skills = skills;
     }
 
+    public String getFilterTag() {
+        return filterTag;
+    }
+
+    public void setFilterTag(String filterTag) {
+        this.filterTag = filterTag;
+    }
 }

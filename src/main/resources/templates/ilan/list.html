@@ -9,20 +9,22 @@
     <h1>Ilanlar</h1>
     <ol class="breadcrumb">
         <li><a href="/"><i class="fa fa-dashboard"></i> Anasayfa</a></li>
-        <li class="active">Tum Ilanlar</li>
+        <li class="active">Tüm İlanlar</li>
     </ol>
 </section>
 <div layout:fragment="content">
     <div class="row">
         <div class="col-md-offset-1 col-md-10">
-
+            <a th:href="@{/admin/ilan/yeni}" class="btn btn-info"><i class="fa fa-plus-circle"></i> Yeni Ilan
+            </a>
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Tum Ilanlar</h3>
+                    <h3 class="box-title">Tüm İlanlar</h3>
 
                     <div class="box-tools">
                         <div class="input-group input-group-sm" style="width: 150px;">
-                            <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+                            <input type="text" name="table_search" class="form-control pull-right"
+                                   placeholder="Ilan Ara">
 
                             <div class="input-group-btn">
                                 <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
@@ -35,27 +37,29 @@
                     <table class="table table-hover">
                         <tbody>
                         <tr>
-                            <th>Ilan Kodu</th>
-                            <th>Ilan Basligi</th>
-                            <th>Kapanma tarihi</th>
+                            <th>İlan Kodu</th>
+                            <th>Ilan Başlığı</th>
+                            <th>Son Başvuru Tarihi</th>
                             <th>Yayin tarihi</th>
                             <th>Durum</th>
-                            <th> Guncelle</th>
+                            <th> Güncelle</th>
                             <th> Sil</th>
                         </tr>
                         <tr th:each="listItem: ${list}">
                             <td th:text="${listItem.adCode}"></td>
                             <td><a th:href="${'/admin/ilan/'+listItem.adCode}" th:text="${listItem.adHeader}"> </a></td>
-                            <td th:text="${listItem.adDeadlineTime}"></td>
-                            <td th:text="${listItem.adActivationTime}"></td>
-                            <td th:if="${adStatus}">
-                                <button type="button" class="btn btn-block btn-success btn-xs">Activate</button>
+                            <td th:text="${listItem.getStringDeadlineTime()}"></td>
+                            <td th:text="${listItem.getStringActivationTime()}"></td>
+                            <td th:if="${listItem.adStatus}">
+                                <a th:href="${'/admin/ilan/'+ listItem.adCode +'/activate'}"
+                                   class="btn btn-block btn-success btn-xs">Aktif et</a>
                             </td>
-                            <td th:unless="${adStatus}">
-                                <button type="button" class="btn btn-block btn-warning btn-xs">Deactivate</button>
+                            <td th:unless="${listItem.adStatus}">
+                                <a th:href="${'/admin/ilan/'+ listItem.adCode +'/deactivate'}"
+                                   class="btn btn-block btn-warning btn-xs">Pasif et</a>
                             </td>
                             <td><a th:href="${'/admin/ilan/'+ listItem.adCode +'/guncelle'}"
-                                   class="btn btn-block btn-primary btn-xs">Edit</a></td>
+                                   class="btn btn-block btn-primary btn-xs">Düzenle</a></td>
                             <td><a th:href="${'/admin/ilan/'+ listItem.adCode +'/sil'}"
                                    class="btn btn-block btn-danger btn-xs">Sil</a></td>
                         </tr>

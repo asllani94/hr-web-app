@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.List;
 
 
@@ -52,7 +53,11 @@ public class ApplicationTests {
 
         advertRepository.saveAndFlush(advert);
 
-        account.applyToAdvert(advert);
+        try {
+            account.applyToAdvert(advert);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         accountRepository.saveAndFlush(account);
 

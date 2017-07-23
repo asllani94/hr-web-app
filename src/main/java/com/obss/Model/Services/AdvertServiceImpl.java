@@ -3,16 +3,19 @@ package com.obss.Model.Services;
 import com.obss.Controllers.Forms.AdvertForm;
 import com.obss.Model.Entities.Advert;
 import com.obss.Model.Entities.Application;
+import com.obss.Model.Entities.Extras.ApplicationStatus;
 import com.obss.Model.Entities.Extras.SkillView;
 import com.obss.Model.Entities.Extras.UserApplication;
 import com.obss.Model.Entities.Extras.UserApplicationComparator;
 import com.obss.Model.Entities.Skill;
 import com.obss.Model.Repositories.AdvertRepository;
 import com.obss.Model.Services.Interfaces.AdvertService;
+import com.obss.Utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -78,8 +81,14 @@ public class AdvertServiceImpl implements AdvertService {
         advert.setAdJobLocation(advertForm.getAdAddress());
         advert.setAdDescription(advertForm.getAdDescription());
         advert.setAdQualifications(advertForm.getAdQualification());
-        advert.setAdActivationTime(new Timestamp(885));
-        advert.setAdDeadlineTime(new Timestamp(555));
+        try {
+            advert.setAdActivationTime(DateUtil.getTimestampFromDate(advertForm.getAdActivation()));
+            advert.setAdDeadlineTime(DateUtil.getTimestampFromDate(advertForm.getAdDeadline()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        advert.setSkills(advertForm.getSkillList());
         advertRepository.save(advert);
 
     }
@@ -91,19 +100,49 @@ public class AdvertServiceImpl implements AdvertService {
         ArrayList<UserApplication> list = new ArrayList<>();
 
         for (Application app : advert.getApplications()) {
-
-            UserApplication newUserApp = new UserApplication();
-            newUserApp.setAccountId(app.getAccount().getAccountId());
-            newUserApp.setFullName(app.getAccount().getFirstName() + " " + app.getAccount().getLastName());
-            newUserApp.setImageUrl(app.getAccount().getImageUrl());
-            newUserApp.setSkills(app.getAccount().getSkills());
-
-            list.add(newUserApp);
+            if (app.getStatus() != ApplicationStatus.DELETED) {
+                UserApplication newUserApp = new UserApplication();
+                newUserApp.setAccountId(app.getAccount().getAccountId());
+                newUserApp.setFullName(app.getAccount().getFirstName() + " " + app.getAccount().getLastName());
+                newUserApp.setImageUrl(app.getAccount().getImageUrl());
+                newUserApp.setSkills(app.getAccount().getSkills());
+                newUserApp.setStatus(app.getStatus());
+                newUserApp.setFilterTag(getFilterTagByStatus(app.getStatus()));
+                newUserApp.setAdCode(app.getAdvert().getAdCode());
+                list.add(newUserApp);
+            }
         }
 
         Set<Skill> requiredSkills = advert.getSkills();
-        //sorts users according to their skills
         list.sort(new UserApplicationComparator(requiredSkills));
         return list;
+    }
+
+    @Override
+    public void activateAdvert(int adCode) {
+        Advert advert = advertRepository.findOne(adCode);
+        advert.setAdStatus(false);
+        advertRepository.save(advert);
+    }
+
+    @Override
+    public void deactivateAdvert(int adCode) {
+        Advert advert = advertRepository.findOne(adCode);
+        advert.setAdStatus(true);
+        advertRepository.save(advert);
+    }
+
+    private String getFilterTagByStatus(int status) {
+        switch (status) {
+            case ApplicationStatus.ON_PROCESS:
+                return "bekleyen";
+            case ApplicationStatus.ACCEPTED:
+                return "onaylanan";
+            case ApplicationStatus.REJECTED:
+                return "iptal";
+            default:
+                return "none";
+        }
+
     }
 }

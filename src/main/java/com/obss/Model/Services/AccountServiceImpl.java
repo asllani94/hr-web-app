@@ -10,10 +10,12 @@ import com.obss.Model.Entities.Skill;
 import com.obss.Model.Repositories.AccountRepository;
 import com.obss.Model.Repositories.AdvertRepository;
 import com.obss.Model.Services.Interfaces.AccountService;
+import com.obss.Utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,26 +53,37 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public ArrayList<AdvertApplication> getUserApplications(String email) {
-        ArrayList<AdvertApplication> list = new ArrayList<>();
         Account account = accountRepository.findByEmail(email);
+        return fillAdvertApplicationObject(account);
+    }
 
+    @Override
+    public ArrayList<AdvertApplication> getUserApplications(int accountId) {
+
+        Account account = accountRepository.findByAccountId(accountId);
+
+
+        return fillAdvertApplicationObject(account);
+    }
+
+
+    private ArrayList<AdvertApplication> fillAdvertApplicationObject(Account account) {
+        ArrayList<AdvertApplication> list = new ArrayList<>();
         for (Application app : account.getApplications()) {
             if (app.getStatus() != ApplicationStatus.DELETED) {
                 AdvertApplication listObject = new AdvertApplication();
                 listObject.setAdCode(app.getAdvert().getAdCode());
                 listObject.setAdHeader(app.getAdvert().getAdHeader());
                 listObject.setStatus(app.getStatus());
-                //timestamp must be added
+                listObject.setApplicationTime(DateUtil.getDateFromTimestamp(app.getApplicationDate()));
 
                 list.add(listObject);
 
             }
 
-
         }
         return list;
     }
-
     @Override
     public ArrayList<SkillView> getAccountSkillsForUI(Account account) {
         ArrayList<SkillView> list = new ArrayList<>();
@@ -92,8 +105,31 @@ public class AccountServiceImpl implements AccountService {
     public void applyToAdvert(int adCode, String email) {
         Account account = accountRepository.findByEmail(email);
         Advert advert = advertRepository.findOne(adCode);
-        account.applyToAdvert(advert);
+        try {
+            account.applyToAdvert(advert);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         accountRepository.save(account);
+    }
+
+    @Override
+    public int getUserIdByEmail(String email) {
+        return accountRepository.findByEmail(email).getAccountId();
+    }
+
+    @Override
+    public boolean hasAlreadyApplied(int adCode, String email) {
+
+        Account account = accountRepository.findByEmail(email);
+
+
+        for (Application app : account.getApplications()) {
+            if (app.getAdvert().getAdCode() == adCode)
+                return true;
+        }
+
+        return false;
     }
 
 

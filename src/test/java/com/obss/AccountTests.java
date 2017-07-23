@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 
 
 @RunWith(SpringRunner.class)
@@ -171,7 +172,11 @@ public class AccountTests {
         advert1.setAdDeadlineTime(new Timestamp(5000));
         advertRepository.saveAndFlush(advert);
 
-        account.applyToAdvert(advert);
+        try {
+            account.applyToAdvert(advert);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         accountRepository.saveAndFlush(account);
 

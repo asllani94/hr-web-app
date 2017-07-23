@@ -9,7 +9,7 @@ import java.security.Timestamp;
 public class AdvertApplication {
     private int adCode;
     private String adHeader;
-    private Timestamp applicationTime;
+    private String applicationTime;
     private int status;
 
 
@@ -29,11 +29,11 @@ public class AdvertApplication {
         this.adHeader = adHeader;
     }
 
-    public Timestamp getApplicationTime() {
+    public String getApplicationTime() {
         return applicationTime;
     }
 
-    public void setApplicationTime(Timestamp applicationTime) {
+    public void setApplicationTime(String applicationTime) {
         this.applicationTime = applicationTime;
     }
 
