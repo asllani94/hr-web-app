@@ -1,6 +1,6 @@
 <!DOCTYPE html  "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sd="http://www.thymeleaf.org/spring-data"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout_admin">
 <head>
     <title>Aday Profili</title>
 </head>
@@ -13,22 +13,58 @@
     </ol>
 </section>
 <div layout:fragment="content">
+    <div class="modal fade" id="modal-default">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">Adayi Karalistele</h4>
+                </div>
+
+                <div class="modal-body">
+                    <form id="blackListForm" action="#" th:action="@{/admin/user/blacklist}"
+                          th:object="${blackListForm}" method="post">
+                        <div class="form-group">
+                            <label>Sebep</label>
+                            <textarea class="form-control" th:field="*{reason}" id="adDescription" rows="3"
+                                      placeholder="Sebebi buraya yazin.."></textarea>
+                            <input type="hidden" th:value="${accountId}" th:field="*{accountId}"/>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default pull-left" data-dismiss="modal" type="button">Kapat</button>
+                    <button id="blackListBtnSubmit" class="btn btn-primary" type="submit">Kaydet</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
     <div class="row">
         <div class="col-md-7">
-
             <!-- Profile Image -->
             <div class="box box-primary">
                 <div class="box-header">
                     <div class="box-tools">
                         <div class="input-group input-group-sm" style="width: 150px;">
-                            <a class="btn btn-block btn-danger btn-xs" href="/admin/user/1/blacklist">Kara Listele</a>
+                            <button th:unless="${isBlackListed}" type="button" class="btn btn-danger"
+                                    data-toggle="modal" data-target="#modal-default">
+                                Adayi Karalistele
+                            </button>
+                            <button th:if="${isBlackListed}" type="button" class="btn btn-default disabled">
+                                Aday Karalistelendi
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <div class="box-body box-profile">
                     <img class="profile-user-img img-responsive img-circle"
-                         src="https://media.licdn.com/mpr/mprx/0_ilLA5atP-ybkK3r6EhgxmM4Pc0JLKlCFGPjA8VzP9Z5kK3_VWhgKDMNtrZbM13lV2hjKepc-RRXXnz-FEGhDSVsOYRX5nzFofGh-QR71vVAdyipn_Pny67TGOmOv0zKRQTkj35hPQcx"
+                         th:src="${account.imageUrl}"
                          alt="User profile picture">
                     <h3 class="profile-username text-center" th:text="${account.firstName+ ' '+ account.lastName}"></h3>
                     <p class="text-muted text-center" th:text="${details.title}"></p>
@@ -118,7 +154,6 @@
         <!-- /.col -->
     </div>
     <!-- /.row -->
-
 
 </div>
 </body>

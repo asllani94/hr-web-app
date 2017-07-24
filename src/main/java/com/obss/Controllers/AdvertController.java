@@ -1,6 +1,7 @@
 package com.obss.Controllers;
 
 import com.obss.Controllers.Forms.AdvertForm;
+import com.obss.Model.Entities.Account;
 import com.obss.Model.Entities.Extras.SkillView;
 import com.obss.Model.Services.AccountServiceImpl;
 import com.obss.Model.Services.AdvertServiceImpl;
@@ -8,6 +9,7 @@ import com.obss.Model.Entities.Advert;
 import com.obss.Model.Services.ApplicationServiceImpl;
 import com.obss.Model.Services.SkillServiceImpl;
 import com.obss.Utils.DateUtil;
+import com.obss.social.CustomSocialUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -80,11 +82,19 @@ public class AdvertController {
         if (advert == null)
             return "/error?message=not_found";
 
-        if (!isRegistered())
-            redirectAttributes.addAttribute("loginMessage", "Ilana basvurmak icin LinkedIn hesabi ile giris yapin");
+        if (!isRegistered()) {
+            redirectAttributes.addFlashAttribute("infoFlash", "Ilana basvurmak icin LinkedIn hesabi ile giris yapin");
+            return "redirect:/login";
+        }
 
-        int accoundId = accountService.getUserIdByEmail(getAuthenticatedEmail());
-        applicationService.newApplication(adCode, accoundId);
+        Account account = accountService.loadAccountByEmail(getAuthenticatedEmail());
+        if (account.getBlacklist() != null) {
+            redirectAttributes.addFlashAttribute("errorFlash",
+                    "Hesabiniz IK Uzmanlar tarafindan " + account.getBlacklist().getReason() + " sebebiyle ile karalistelenmis,bu ilana basvuramazsiniz!");
+            return "redirect:/ilan/" + adCode;
+        }
+
+        applicationService.newApplication(adCode, account.getAccountId());
         redirectAttributes.addFlashAttribute("successFlash", "Ilana Basvuruldu");
         return "redirect:/user/basvurularim";
     }
@@ -130,7 +140,10 @@ public class AdvertController {
     }
 
     private String getAuthenticatedEmail() {
-        return SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return account.getEmail();
     }
 
 

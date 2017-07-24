@@ -58,5 +58,13 @@ public class ApplicationServiceImpl implements ApplicationService {
         entityManager.createNativeQuery(query).executeUpdate();
     }
 
+    @Override
+    @Transactional
+    public void rejectCandidateApplications(int accountId) {
+        int status = ApplicationStatus.REJECTED;
+        String query = "UPDATE application SET status=" + status + " WHERE  account_id=" + accountId;
+        entityManager.createNativeQuery(query).executeUpdate();
+    }
+
 
 }

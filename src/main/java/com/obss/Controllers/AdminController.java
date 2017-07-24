@@ -1,10 +1,8 @@
 package com.obss.Controllers;
 
 import com.obss.Controllers.Forms.AdvertForm;
-import com.obss.Model.Entities.Account;
-import com.obss.Model.Entities.AccountDetails;
-import com.obss.Model.Entities.Advert;
-import com.obss.Model.Entities.Application;
+import com.obss.Controllers.Forms.BlackListForm;
+import com.obss.Model.Entities.*;
 import com.obss.Model.Entities.Extras.AdvertApplication;
 import com.obss.Model.Entities.Extras.ApplicationStatus;
 import com.obss.Model.Entities.Extras.SkillView;
@@ -13,13 +11,19 @@ import com.obss.Model.Services.ApplicationServiceImpl;
 import com.obss.Model.Services.Interfaces.AccountService;
 import com.obss.Model.Services.Interfaces.AdvertService;
 import com.obss.Model.Services.SkillServiceImpl;
+import com.obss.Utils.DateUtil;
+import com.obss.Utils.EmailUtil;
+import com.sun.deploy.util.BlackList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -79,7 +83,7 @@ public class AdminController {
     @RequestMapping(value = {"/admin/ilan/{ad_code}/guncelle"})
     public String adminAdvertUpdate(@PathVariable(value = "ad_code") int adCode, Model model) {
         AdvertForm advertForm = new AdvertForm();
-        populateForm(advertForm, adCode);
+        populateAdvertForm(advertForm, adCode);
         advertForm.setUpdate(true);
         model.addAttribute("advertForm", advertForm);
         model.addAttribute("list", skillService.getAllSkills());
@@ -111,11 +115,12 @@ public class AdminController {
     public String adminAcceptApplication(@PathVariable(value = "ad_code") int adCode,
                                          @PathVariable(value = "account_id") int accountId,
                                          RedirectAttributes redirectAttributes) {
-        applicationService.updateApplicationStatusByAccountId(adCode, accountId, ApplicationStatus.ACCEPTED);
 
+        applicationService.updateApplicationStatusByAccountId(adCode, accountId, ApplicationStatus.ACCEPTED);
+        EmailUtil emailUtil = new EmailUtil();
+        emailUtil.notifyStatusChange(accountService.getEmailByAccountId(accountId), ApplicationStatus.ACCEPTED, adCode);
         redirectAttributes.addFlashAttribute("successFlash", "Basvuru kabul edildi");
 
-        //send mail to user
         return "redirect:/admin/ilan/" + adCode;
     }
 
@@ -123,31 +128,66 @@ public class AdminController {
     public String adminRejectApplication(@PathVariable(value = "ad_code") int adCode,
                                          @PathVariable(value = "account_id") int accountId,
                                          RedirectAttributes redirectAttributes) {
+
         applicationService.updateApplicationStatusByAccountId(adCode, accountId, ApplicationStatus.REJECTED);
+        EmailUtil emailUtil = new EmailUtil();
+        emailUtil.notifyStatusChange(accountService.getEmailByAccountId(accountId), ApplicationStatus.REJECTED, adCode);
         redirectAttributes.addFlashAttribute("successFlash", "Basvuru red edildi");
 
-        //send mail to user
         return "redirect:/admin/ilan/" + adCode;
     }
 
     @RequestMapping(value = {"/admin/user/{account_id}"})
     public String adminViewCandidateProfile(@PathVariable(value = "account_id") int accountId,
                                             Model model) {
+
         Account account = accountService.loadAccountByAccountId(accountId);
         AccountDetails details = account.getAccountDetails();
         List<SkillView> skills = accountService.getAccountSkillsForUI(account);
         ArrayList<AdvertApplication> list = accountService.getUserApplications(accountId);
+        Blacklist blackList = account.getBlacklist();
+        boolean isBlackListed = false;
+
+        if (blackList != null)
+            isBlackListed = true;
+
+        BlackListForm blackListForm = new BlackListForm();
+        blackListForm.setAccountId(accountId);
+
+        model.addAttribute("isBlackListed", isBlackListed);
         model.addAttribute("account", account);
         model.addAttribute("details", details);
         model.addAttribute("skills", skills);
         model.addAttribute("list", list);
+        model.addAttribute("blackListForm", blackListForm);
         return "/user/user_admin";
     }
 
 
+    @RequestMapping(value = "/admin/user/blacklist", method = RequestMethod.POST)
+    public String blackListCandidate(@Valid BlackListForm blackListForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("errorFlash", "Sebep boş olamaz!");
+            return "redirect:/admin/user/" + blackListForm.getAccountId();
+        }
+
+        Account account = accountService.loadAccountByAccountId(blackListForm.getAccountId());
+        Blacklist blacklist = new Blacklist();
+        blacklist.setReason(blackListForm.getReason());
+        account.setBlacklist(blacklist);
+        accountService.createOrUpdateAccount(account);
+        EmailUtil emailUtil = new EmailUtil();
+        emailUtil.notifyCandidateBlacklisted(account.getEmail(), blackListForm.getReason());
+        applicationService.rejectCandidateApplications(blackListForm.getAccountId());
+
+        redirectAttributes.addFlashAttribute("successFlash", "Aday Karalistelendi!");
+        return "redirect:/admin/user/" + blackListForm.getAccountId();
+
+    }
 
 
-    private void populateForm(AdvertForm advertForm, int adCode) {
+    private void populateAdvertForm(AdvertForm advertForm, int adCode) {
         Advert advert = advertService.loadAdvertByAdCode(adCode);
         advertForm.setAdCode(advert.getAdCode());
         advertForm.setAdHead(advert.getAdHeader());

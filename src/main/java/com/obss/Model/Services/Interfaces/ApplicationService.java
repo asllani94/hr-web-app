@@ -13,4 +13,6 @@ public interface ApplicationService {
     public void newApplication(int adCode, int accountId);
 
     public void deleteApplicationByAccountIdAndAdCode(int adCode, int accountId);
+
+    public void rejectCandidateApplications(int accountId);
 }

@@ -33,11 +33,11 @@ public class UserApplicationComparator implements Comparator<UserApplication> {
         int intersectionCandidate2 = calculateIntersection(app2.getSkills(), this.requiredSkills);
 
         if (intersectionCandidate1 > intersectionCandidate2)
-            return 1;
+            return -1;
         else if (intersectionCandidate1 == intersectionCandidate2)
             return 0;
         else
-            return -1;
+            return 1;
 
     }
 }

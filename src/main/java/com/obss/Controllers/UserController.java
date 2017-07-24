@@ -45,10 +45,11 @@ public class UserController {
 
 
         if (isAdmin()) {
-            //Current logged user has admin authority so we need to redirect it
+            redirectAttributes.addFlashAttribute("successFlash", "IK Uzmani olararak giris yaptiniz");
             return "redirect: /admin/dashboard";
         } else if (isRegistered()) {
             //send redirect attribute
+            redirectAttributes.addFlashAttribute("successFlash", "Successfully logged in");
             return "redirect:/ilan/all";
         }
 
@@ -56,10 +57,7 @@ public class UserController {
 
     }
 
-    private boolean isRegistered() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return true;
-    }
+
 
     @RequestMapping(value = "/user/{account_id}")
     public String getUserWithId(@PathVariable("account_id") int id, Model model) {
@@ -77,8 +75,8 @@ public class UserController {
 
     @RequestMapping(value = "/user/profilim")
     public String userProfile(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
+
+        String email = getCurrentUserEmail();
         Account account = accountService.loadAccountByEmail(email);
         if (account == null)
             return "/error?message=not_found";
@@ -97,8 +95,7 @@ public class UserController {
 
     @RequestMapping(value = "/user/basvurularim")
     public String userApplications(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
+        String email = getCurrentUserEmail();
         ArrayList<AdvertApplication> list = accountService.getUserApplications(email);
         if (list.size() > 0) {
             model.addAttribute("list", list);
@@ -110,9 +107,9 @@ public class UserController {
 
     @RequestMapping(value = "/user/ilan/{ad_code}/apply")
     public String userApply(@PathVariable("ad_code") int adCode, RedirectAttributes ra) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-        applicationService.newApplication(adCode, accountService.getUserIdByEmail(email));
+
+        int accountId = getCurrentUserId();
+        applicationService.newApplication(adCode, accountId);
         ra.addFlashAttribute("successFlash", "İlana başvurdunuz!");
         return "redirect:/user/basvurularim";
     }
@@ -120,10 +117,7 @@ public class UserController {
     @RequestMapping(value = "/user/ilan/{ad_code}/cancel")
     public String userCancelApplication(@PathVariable("ad_code") int adCode, RedirectAttributes ra) {
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-
-        int accoundId = accountService.getUserIdByEmail(email);
+        int accoundId = getCurrentUserId();
         //accountService.applyToAdvert(adCode,email);
         applicationService.deleteApplicationByAccountIdAndAdCode(adCode, accoundId);
         ra.addFlashAttribute("successFlash", "Başvurunuz geri çekildi!");
@@ -143,4 +137,25 @@ public class UserController {
         return false;
     }
 
+    private boolean isRegistered() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        for (GrantedAuthority authority : auth.getAuthorities()) {
+            if (authority.getAuthority().equals("ROLE_USER"))
+                return true;
+        }
+
+        return false;
+    }
+
+    private String getCurrentUserEmail() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Account account = (Account) auth.getPrincipal();
+        return account.getEmail();
+    }
+
+    private int getCurrentUserId() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Account account = (Account) auth.getPrincipal();
+        return account.getAccountId();
+    }
 }

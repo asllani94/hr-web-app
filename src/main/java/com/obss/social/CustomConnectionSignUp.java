@@ -81,7 +81,7 @@ public class CustomConnectionSignUp implements ConnectionSignUp {
 
     //only for testing
     private void populateDB(Account account) {
-        Advert advert = new Advert();
+      /*  Advert advert = new Advert();
         advert.setAdHeader("Garson araniyor!!");
 
         advert.setAdDescription("ADAMAR A.Ş. Şubelerinde görevlendirilmek üzere\n" +
@@ -126,6 +126,7 @@ public class CustomConnectionSignUp implements ConnectionSignUp {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        */
         usersDao.createOrUpdateAccount(account);
 
     }

@@ -1,6 +1,5 @@
 package com.obss.Model.Entities.Extras;
 
-import java.security.Timestamp;
 
 /**
  * Created by arnold on 7/18/2017.

@@ -36,4 +36,5 @@ public interface AccountService {
 
     public boolean hasAlreadyApplied(int adCode, String email);
 
+    public String getEmailByAccountId(int accountId);
 }

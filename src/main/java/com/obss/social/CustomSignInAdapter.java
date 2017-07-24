@@ -38,7 +38,7 @@ public class CustomSignInAdapter implements SignInAdapter {
         if (user!=null){
                 SecurityContextHolder.getContext().setAuthentication(
                         new UsernamePasswordAuthenticationToken(
-                                user.getEmail(), null,
+                                user, null,
                                 Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"))));
                 return null;
             }
