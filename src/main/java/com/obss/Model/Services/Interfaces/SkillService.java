@@ -16,5 +16,4 @@ public interface SkillService {
 
     public Skill findSkill(int skillId);
 
-    public void createSkill(Skill skill);
 }

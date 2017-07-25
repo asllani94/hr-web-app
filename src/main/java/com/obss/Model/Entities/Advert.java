@@ -194,6 +194,6 @@ public class Advert {
         if (this.getAdDescription().length() > 280)
             return this.getAdDescription().substring(0, 275) + "...";
         else
-            return this.getAdDescription() + "...";
+            return this.getAdDescription();
     }
 }

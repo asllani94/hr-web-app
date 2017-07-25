@@ -1,3 +1,5 @@
+DELETE FROM userconnection;
+
 #Bulk insert skills
 
 INSERT INTO skill (skill_name) VALUES ('Android');

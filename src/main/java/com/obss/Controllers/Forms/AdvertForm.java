@@ -32,7 +32,6 @@ public class AdvertForm {
 
     private String adQualification;
 
-
     private boolean update;
 
 

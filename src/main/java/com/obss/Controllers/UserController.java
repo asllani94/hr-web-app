@@ -112,9 +112,9 @@ public class UserController {
     @RequestMapping(value = "/user/ilan/{ad_code}/cancel")
     public String userCancelApplication(@PathVariable("ad_code") int adCode, RedirectAttributes ra) {
 
-        int accoundId = getCurrentUserId();
+        int accountId = getCurrentUserId();
         //accountService.applyToAdvert(adCode,email);
-        applicationService.deleteApplicationByAccountIdAndAdCode(adCode, accoundId);
+        applicationService.deleteApplicationByAccountIdAndAdCode(adCode, accountId);
         ra.addFlashAttribute("successFlash", "Başvurunuz geri çekildi!");
 
         return "redirect:/user/basvurularim";

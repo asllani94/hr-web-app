@@ -14,7 +14,7 @@ import java.util.Properties;
 
 /**
  * Created by arnold on 7/24/2017.
- * Email calss makes use of JavaMailSender class to send a simple email.
+ * Email class makes use of JavaMailSender class to send a simple email.
  *
  */
 @Service
@@ -27,8 +27,8 @@ public class EmailUtil {
         this.mailSender = new JavaMailSenderImpl();
         this.mailSender.setHost("smtp.gmail.com");
         this.mailSender.setPort(587);
-        this.mailSender.setUsername("asllani94@gmail.com");
-        this.mailSender.setPassword("lowhfzzzzyvwhquq");
+        this.mailSender.setUsername("thinkfastdieoldgrowbigkuddos@gmail.com");
+        this.mailSender.setPassword("ojxgkioomiybjnmt");
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");

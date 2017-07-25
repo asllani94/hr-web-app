@@ -5,6 +5,7 @@ import com.obss.Model.Entities.Advert;
 import com.obss.Model.Entities.Extras.AdvertApplication;
 import com.obss.Model.Entities.Extras.SkillView;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +31,10 @@ public interface AccountService {
 
     public int getTotalAccounts();
 
-    public void applyToAdvert(int adCode, String email);
+    @Transactional
+    void applyToAdvert(int adCode, String email);
 
-    public int getUserIdByEmail(String email);
+    int getUserIdByEmail(String email);
 
     public boolean hasAlreadyApplied(int adCode, String email);
 

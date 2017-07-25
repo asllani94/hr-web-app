@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * Created by arnold on 7/22/2017.
  * A helper class that manages conversion between a string date and a TimeStamp object.
- * Throws ParseExeption if provided string isn't convertable.
+ * Throws ParseExeption if provided string isn't convertible.
  */
 public class DateUtil {
 
