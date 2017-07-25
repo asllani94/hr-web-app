@@ -2,6 +2,7 @@ package com.obss.social;
 
 import com.obss.Model.Services.AccountServiceImpl;
 import com.obss.Model.Services.AdvertServiceImpl;
+import com.obss.Model.Services.SkillServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,14 +25,13 @@ import javax.sql.DataSource;
 @EnableSocial
 public class SocialConfig extends SocialConfigurerAdapter {
     @Autowired
+    SkillServiceImpl skillService;
+    @Autowired
     private DataSource dataSource;
-
     @Autowired
     private AccountServiceImpl myUserAccountServiceImpl;
-
     @Autowired
     private AdvertServiceImpl advertService;
-
 
     @Bean
     @Override
@@ -44,7 +44,7 @@ public class SocialConfig extends SocialConfigurerAdapter {
     public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
         JdbcUsersConnectionRepository usersConnectionRepository = new JdbcUsersConnectionRepository(dataSource,
                 connectionFactoryLocator, Encryptors.noOpText());
-        usersConnectionRepository.setConnectionSignUp(new CustomConnectionSignUp(myUserAccountServiceImpl, advertService));
+        usersConnectionRepository.setConnectionSignUp(new CustomConnectionSignUp(myUserAccountServiceImpl, advertService, skillService));
         return  usersConnectionRepository;
     }
 

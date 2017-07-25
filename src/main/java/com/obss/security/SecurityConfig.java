@@ -52,20 +52,21 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**", "/admin/").access("hasRole('ROLE_ADMIN')")
                 .antMatchers("/user/**", "/user/", "/").access("hasRole('ROLE_USER')")
                 .antMatchers("/ilan/yeni").access("hasRole('ROLE_ADMIN')")
-
-                .antMatchers("/dist/**", "/bootstrap/**", "/plugins/**").permitAll()
+                .antMatchers("/dist/**", "/bootstrap/**", "/plugins/**", "/", "/ilan/**").permitAll()
                 .and()
                 .formLogin().successHandler(new AppSuccessHandler())
                 .loginPage("/login")
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .failureUrl("/login?error=true")
+                .failureUrl("/login?error")
                 .permitAll()
                 .and()
                 .authorizeRequests()
                 .antMatchers("/favicon.ico", "/static-resources/**").permitAll()
                 .and()
-                .apply(new SpringSocialConfigurer());
+                .apply(new SpringSocialConfigurer())
+                .and()
+                .exceptionHandling().accessDeniedPage("/access_denied");
 
 
     }

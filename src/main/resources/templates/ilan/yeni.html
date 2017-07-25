@@ -30,29 +30,29 @@
                             <form id="advertForm" action="#" th:action="@{/ilan/yeni}" th:object="${advertForm}"
                                   method="post">
                                 <div class="form-group">
-                                    <label for="adHead">İlan Başlığı</label>
+                                    <label for="adHead"><i class="fa fa-newspaper-o"></i> İlan Başlığı</label>
                                     <input type="text" th:field="*{adHead}" th:text="${adHead}" id="adHead"
                                            class="form-control" placeholder="İlan Başlığı" autocomplete="off">
                                 </div>
                                 <div class="form-group">
-                                    <label>Is Unvani</label>
+                                    <label><i class="fa fa-black-tie"></i> Ünvan</label>
                                     <input type="text" th:field="*{adTitle}" th:text="${adTitle}" id="adTitle"
                                            class="form-control" placeholder="Software Developer, etc"
                                            autocomplete="off">
                                 </div>
                                 <div class="form-group">
-                                    <label for="adAddress">Adres</label>
+                                    <label for="adAddress"><i class="fa fa-map-marker"></i> Adres</label>
                                     <input type="text" th:field="*{adAddress}" th:text="${adAddress}" id="adAddress"
                                            class="form-control" placeholder="Adres" autocomplete="off">
                                 </div>
                                 <div class="form-group">
-                                    <label>Is Tanimi</label>
+                                    <label><i class="fa fa-file-text-o"></i> İş Tanımı</label>
                                     <textarea class="form-control" th:field="*{adDescription}"
                                               th:value="${adDescription}" id="adDescription" rows="3"
                                               placeholder="Describe job here.."></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label>Arınan Nitelikler</label>
+                                    <label><i class="fa fa-file-text-o"></i> Arınan Nitelikler</label>
                                     <textarea class="form-control" th:field="*{adQualification}"
                                               th:value="${adQualification}" id="adQualification" rows="3"
                                               placeholder="-Should have 3 years of experience.."></textarea>
@@ -87,7 +87,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Yetenekler</label>
+                                    <label><i class="fa fa-star-o"></i> Yetenekler</label>
                                     <select th:unless="${advertForm.update}" th:field="*{skillList}" aria-hidden="true"
                                             class="form-control select2 select2-hidden-accessible"
                                             data-placeholder="Ozellikleri sec" multiple="" style="width: 100%;"

@@ -1,10 +1,5 @@
 package com.obss.security;
 
-/**
- * Created by arnold on 7/11/2017.
- * After a successful login user is redirected according to it's roles. There are default landing
- * pages for each user type.
- */
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -57,8 +52,8 @@ public class AppSuccessHandler
  
         redirectStrategy.sendRedirect(request, response, targetUrl);
     }
- 
-    protected String determineTargetUrl(Authentication authentication) {
+
+    private String determineTargetUrl(Authentication authentication) {
         boolean isUser = false;
         boolean isAdmin = false;
         Collection<? extends GrantedAuthority> authorities
@@ -80,8 +75,8 @@ public class AppSuccessHandler
             throw new IllegalStateException();
         }
     }
- 
-    protected void clearAuthenticationAttributes(HttpServletRequest request) {
+
+    private void clearAuthenticationAttributes(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session == null) {
             return;

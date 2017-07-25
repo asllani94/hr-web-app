@@ -46,9 +46,7 @@ public  class ApplicationId implements Serializable {
         ApplicationId that = (ApplicationId) o;
 
         if (this.advert.getAdCode() != that.advert.getAdCode()) return false;
-        if (this.account.getAccountId() != that.account.getAccountId()) return false;
-
-        return true;
+        return this.account.getAccountId() == that.account.getAccountId();
     }
 
     @Override

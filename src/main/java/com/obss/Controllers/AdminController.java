@@ -47,11 +47,16 @@ public class AdminController {
     @Autowired
     private SkillServiceImpl skillService;
 
+    @Autowired
+    private EmailUtil emailUtil;
+
+
     @RequestMapping(value = {"/admin/dashboard","/admin"})
     public String userWelcomePage(Model model) {
 
         model.addAttribute("totalAccount", accountService.getTotalAccounts());
         model.addAttribute("totalAdvert", advertService.getTotalAdverts());
+        model.addAttribute("totalApplication", applicationService.getTotalApplications());
         return "/admin/dashboard";
     }
 
@@ -62,6 +67,7 @@ public class AdminController {
         return "/ilan/list";
     }
 
+
     @RequestMapping(value = {"/admin/ilan/{ad_code}"})
     public String adminAdvertInfo(@PathVariable(value = "ad_code") int adCode, Model model) {
         List<UserApplication> orderedCandidates = advertService.getCandidateApplications(adCode);
@@ -70,11 +76,18 @@ public class AdminController {
         return "/ilan/application_list";
     }
 
+    @RequestMapping(value = {"/admin/user/all"})
+    public String adminListUsers(Model model) {
+        List<Account> accounts = accountService.loadAllAccounts();
+        model.addAttribute("list", accounts);
+        return "/user/user_list";
+    }
+
 
     @RequestMapping(value = {"/admin/ilan/yeni"})
     public String adminAdvertCreate(Model model) {
         AdvertForm advertForm = new AdvertForm();
-        advertForm.setUpdate(false);
+        advertForm.setUpdate(false); //is not an edit but a new advert
         model.addAttribute("advertForm", advertForm);
         model.addAttribute("list", skillService.getAllSkills());
         return "/ilan/yeni";
@@ -84,7 +97,7 @@ public class AdminController {
     public String adminAdvertUpdate(@PathVariable(value = "ad_code") int adCode, Model model) {
         AdvertForm advertForm = new AdvertForm();
         populateAdvertForm(advertForm, adCode);
-        advertForm.setUpdate(true);
+        advertForm.setUpdate(true); //we are updating an existing advert we set update boolean to true
         model.addAttribute("advertForm", advertForm);
         model.addAttribute("list", skillService.getAllSkills());
         return "/ilan/yeni";
@@ -93,21 +106,22 @@ public class AdminController {
     @RequestMapping(value = {"/admin/ilan/{ad_code}/sil"})
     public String adminAdvertDelete(@PathVariable(value = "ad_code") int adCode, RedirectAttributes redirectAttributes) {
         advertService.deleteAdvert(adCode);
-        redirectAttributes.addFlashAttribute("successFlash", "Ilan silindi!");
+        redirectAttributes.addFlashAttribute("infoFlash", "Ilan silindi!");
         return "redirect:/admin/ilan/ilanlar";
     }
 
     @RequestMapping(value = {"/admin/ilan/{ad_code}/activate"})
     public String adminAdvertActivate(@PathVariable(value = "ad_code") int adCode, RedirectAttributes redirectAttributes) {
         advertService.activateAdvert(adCode);
-        redirectAttributes.addFlashAttribute("successFlash", "Ilan etkinleştirildi!");
+        redirectAttributes.addFlashAttribute("infoFlash", "Ilan etkinleştirildi!");
         return "redirect:/admin/ilan/ilanlar";
     }
+
 
     @RequestMapping(value = {"/admin/ilan/{ad_code}/deactivate"})
     public String adminAdvertDeactivate(@PathVariable(value = "ad_code") int adCode, RedirectAttributes redirectAttributes) {
         advertService.deactivateAdvert(adCode);
-        redirectAttributes.addFlashAttribute("successFlash", "Ilan kapatıldı!");
+        redirectAttributes.addFlashAttribute("infoFlash", "Ilan kapatıldı!");
         return "redirect:/admin/ilan/ilanlar";
     }
 
@@ -117,7 +131,6 @@ public class AdminController {
                                          RedirectAttributes redirectAttributes) {
 
         applicationService.updateApplicationStatusByAccountId(adCode, accountId, ApplicationStatus.ACCEPTED);
-        EmailUtil emailUtil = new EmailUtil();
         emailUtil.notifyStatusChange(accountService.getEmailByAccountId(accountId), ApplicationStatus.ACCEPTED, adCode);
         redirectAttributes.addFlashAttribute("successFlash", "Basvuru kabul edildi");
 
@@ -130,9 +143,8 @@ public class AdminController {
                                          RedirectAttributes redirectAttributes) {
 
         applicationService.updateApplicationStatusByAccountId(adCode, accountId, ApplicationStatus.REJECTED);
-        EmailUtil emailUtil = new EmailUtil();
         emailUtil.notifyStatusChange(accountService.getEmailByAccountId(accountId), ApplicationStatus.REJECTED, adCode);
-        redirectAttributes.addFlashAttribute("successFlash", "Basvuru red edildi");
+        redirectAttributes.addFlashAttribute("errorFlash", "Basvuru red edildi");
 
         return "redirect:/admin/ilan/" + adCode;
     }
@@ -145,10 +157,10 @@ public class AdminController {
         AccountDetails details = account.getAccountDetails();
         List<SkillView> skills = accountService.getAccountSkillsForUI(account);
         ArrayList<AdvertApplication> list = accountService.getUserApplications(accountId);
-        Blacklist blackList = account.getBlacklist();
+        Blacklist blackListObject = account.getBlacklist();
         boolean isBlackListed = false;
 
-        if (blackList != null)
+        if (blackListObject != null)
             isBlackListed = true;
 
         BlackListForm blackListForm = new BlackListForm();
@@ -168,20 +180,18 @@ public class AdminController {
     public String blackListCandidate(@Valid BlackListForm blackListForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("errorFlash", "Sebep boş olamaz!");
+            redirectAttributes.addFlashAttribute("errorFlash", "Alanlari bos olamaz!");
             return "redirect:/admin/user/" + blackListForm.getAccountId();
         }
-
         Account account = accountService.loadAccountByAccountId(blackListForm.getAccountId());
         Blacklist blacklist = new Blacklist();
         blacklist.setReason(blackListForm.getReason());
         account.setBlacklist(blacklist);
         accountService.createOrUpdateAccount(account);
-        EmailUtil emailUtil = new EmailUtil();
         emailUtil.notifyCandidateBlacklisted(account.getEmail(), blackListForm.getReason());
         applicationService.rejectCandidateApplications(blackListForm.getAccountId());
 
-        redirectAttributes.addFlashAttribute("successFlash", "Aday Karalistelendi!");
+        redirectAttributes.addFlashAttribute("infoFlash", "Aday Karalistelendi!");
         return "redirect:/admin/user/" + blackListForm.getAccountId();
 
     }
@@ -189,6 +199,7 @@ public class AdminController {
 
     private void populateAdvertForm(AdvertForm advertForm, int adCode) {
         Advert advert = advertService.loadAdvertByAdCode(adCode);
+
         advertForm.setAdCode(advert.getAdCode());
         advertForm.setAdHead(advert.getAdHeader());
         advertForm.setAdTitle(advert.getAdJobTitle());

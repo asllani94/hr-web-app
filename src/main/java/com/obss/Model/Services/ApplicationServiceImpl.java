@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.text.ParseException;
 
@@ -64,6 +65,14 @@ public class ApplicationServiceImpl implements ApplicationService {
         int status = ApplicationStatus.REJECTED;
         String query = "UPDATE application SET status=" + status + " WHERE  account_id=" + accountId;
         entityManager.createNativeQuery(query).executeUpdate();
+    }
+
+    @Override
+    @Transactional
+    public BigInteger getTotalApplications() {
+        String query = "SELECT COUNT(*) FROM application";
+        BigInteger count = (BigInteger) entityManager.createNativeQuery(query).getSingleResult();
+        return count;
     }
 
 

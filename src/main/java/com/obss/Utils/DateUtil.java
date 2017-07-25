@@ -32,21 +32,20 @@ public class DateUtil {
         return getTimestampFromDate(strDate);
     }
 
-    public static String getCurrentDate() throws ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
-        Date now = new Date();
-        return dateFormat.format(now);
-    }
 
     public static boolean isValidDate(String date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
-        Date retrievedDate = null;
-
         try {
-            retrievedDate = dateFormat.parse(date);
+            Date parsed = dateFormat.parse(date);
+
+            if (parsed.getTime() < (new Date().getTime()))
+                return false;
+
         } catch (ParseException e) {
             return false;
         }
+
         return true;
     }
+
 }

@@ -15,7 +15,7 @@
 <div layout:fragment="content">
     <div class="row">
         <div class=" col-md-offset-1 col-md-10">
-            <div class="box box-info">
+            <div class="box box-success">
                 <div class="box-header with-border">
                     <h2 class="box-title"></h2>
                     <p class="h2 text-center" th:text="${advert.adHeader}"></p>
@@ -52,8 +52,8 @@
                         <div class="col-md-12">
                             <p class="h3 text-center"><i class="fa fa-file-text-o margin-r-5"></i> İş tanımı</p>
                             <br>
-                            <p th:text="${advert.adDescription}">
-                            </p>
+                            <div class="text-justified" th:text="${advert.adDescription}"></div>
+
                         </div>
                     </div>
                     <hr>
@@ -61,8 +61,8 @@
                         <div class="col-md-12">
                             <p class="h3 text-center"><i class="fa fa-pencil margin-r-5"></i> Arınan Nitelikler</p>
                             <br>
-                            <div class="text-justified">
-                                <p th:text="${advert.adQualifications}"></p>
+                            <div class="text-justified" th:text="${advert.adQualifications}">
+
                             </div>
                         </div>
                     </div>

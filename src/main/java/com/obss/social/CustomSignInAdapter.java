@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.NativeWebRequest;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.UUID;
 
 /**
@@ -39,13 +40,13 @@ public class CustomSignInAdapter implements SignInAdapter {
                 SecurityContextHolder.getContext().setAuthentication(
                         new UsernamePasswordAuthenticationToken(
                                 user, null,
-                                Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"))));
+                                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))));
                 return null;
             }
             else {
 
                 SecurityContextHolder.getContext().setAuthentication(
-                        new AnonymousAuthenticationToken(UUID.randomUUID().toString(), UUID.randomUUID().toString(), Arrays.asList(new SimpleGrantedAuthority("ROLE_ANONYMOUS"))));
+                        new AnonymousAuthenticationToken(UUID.randomUUID().toString(), UUID.randomUUID().toString(), Collections.singletonList(new SimpleGrantedAuthority("ROLE_ANONYMOUS"))));
                 return null;
             }
 

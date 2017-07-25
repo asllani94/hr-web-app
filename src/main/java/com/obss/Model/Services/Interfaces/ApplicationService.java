@@ -2,6 +2,8 @@ package com.obss.Model.Services.Interfaces;
 
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
+
 /**
  * Created by arnold on 7/21/2017.
  */
@@ -15,4 +17,6 @@ public interface ApplicationService {
     public void deleteApplicationByAccountIdAndAdCode(int adCode, int accountId);
 
     public void rejectCandidateApplications(int accountId);
+
+    public BigInteger getTotalApplications();
 }

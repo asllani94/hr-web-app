@@ -1,0 +1,31 @@
+<!DOCTYPE html  "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sd="http://www.thymeleaf.org/spring-data"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+<head>
+    <title>Access Denied</title>
+</head>
+<body>
+<section layout:fragment="header">
+    <h1>Access Denied</h1>
+
+</section>
+<div layout:fragment="content">
+    <div class="error-page">
+        <h2 class="headline text-red">Access Denied</h2>
+
+        <div class="error-content">
+            <h3><i class="fa fa-warning text-red"></i> You don't have permission to view this page.</h3>
+
+            <p>
+                Log in as a priviledged user in order to view this page.
+                You may <a href="/login">login</a> here.
+            </p>
+
+
+        </div>
+    </div>
+
+</div>
+</div>
+</body>
+</html>

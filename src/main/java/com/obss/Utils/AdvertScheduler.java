@@ -1,6 +1,7 @@
 package com.obss.Utils;
 
 import com.obss.Model.Entities.Advert;
+import com.obss.Model.Entities.Extras.AdvertStatus;
 import com.obss.Model.Services.AdvertServiceImpl;
 import com.obss.Utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,6 @@ public class AdvertScheduler {
     @Autowired
     private AdvertServiceImpl advertService;
 
-
     //run every 24 hours
     @Scheduled(fixedRate = 1000 * 60 * 60 * 24)
     public void activateAndDeactivateAdverts() {
@@ -39,9 +39,10 @@ public class AdvertScheduler {
         List<Advert> adverts = advertService.loadAllAdverts();
         for (Advert ad : adverts) {
             if (ad.getAdActivationTime() == todayDate)
-                ad.setAdStatus(false);
+                ad.setAdStatus(AdvertStatus.ACTIVE_ADVERT);
             if (ad.getAdDeadlineTime() == todayDate)
-                ad.setAdStatus(true);
+                ad.setAdStatus(AdvertStatus.DEACTIVE_ADVERT);
+
             advertService.createAdvert(ad);
         }
 

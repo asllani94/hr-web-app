@@ -62,8 +62,6 @@ public class UserController {
     @RequestMapping(value = "/user/{account_id}")
     public String getUserWithId(@PathVariable("account_id") int id, Model model) {
         Account account = accountService.loadAccountByAccountId(id);
-        if (account == null)
-            return "/error?message=not_found";
         AccountDetails details = account.getAccountDetails();
         ArrayList<SkillView> skills = accountService.getAccountSkillsForUI(account);
         model.addAttribute("account", account);
@@ -78,9 +76,6 @@ public class UserController {
 
         String email = getCurrentUserEmail();
         Account account = accountService.loadAccountByEmail(email);
-        if (account == null)
-            return "/error?message=not_found";
-
         AccountDetails details = account.getAccountDetails();
         ArrayList<SkillView> skills = accountService.getAccountSkillsForUI(account);
         model.addAttribute("account", account);
@@ -101,7 +96,7 @@ public class UserController {
             model.addAttribute("list", list);
             return "/user/basvurularim";
         } else
-            return "/notfound";
+            return "/user/basvurularim";
 
     }
 

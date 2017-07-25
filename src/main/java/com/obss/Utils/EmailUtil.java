@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
 
@@ -12,24 +14,30 @@ import java.util.Properties;
 
 /**
  * Created by arnold on 7/24/2017.
+ * Email calss makes use of JavaMailSender class to send a simple email.
+ *
  */
 @Service
 public class EmailUtil {
 
 
-    private void sendMail(String to, String subject, String text) {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
+    private JavaMailSenderImpl mailSender;
 
-        mailSender.setUsername("asllani94@gmail.com");
-        mailSender.setPassword("lowhfzzzzyvwhquq");
-
+    public EmailUtil() {
+        this.mailSender = new JavaMailSenderImpl();
+        this.mailSender.setHost("smtp.gmail.com");
+        this.mailSender.setPort(587);
+        this.mailSender.setUsername("asllani94@gmail.com");
+        this.mailSender.setPassword("lowhfzzzzyvwhquq");
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.debug", "true");
+    }
+
+    @Async("threadPoolTaskExecutor")
+    private void sendMail(String to, String subject, String text) {
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
@@ -51,7 +59,7 @@ public class EmailUtil {
                 break;
 
             case ApplicationStatus.REJECTED:
-                message = "Application made to advert no:" + adCode + " was rejected";
+                message = "Application made to advert no:" + adCode + " was rejected by HR expert";
                 break;
         }
 

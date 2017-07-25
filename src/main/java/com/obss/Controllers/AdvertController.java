@@ -46,6 +46,7 @@ public class AdvertController {
     @Autowired
     private ApplicationServiceImpl applicationService;
 
+
     @RequestMapping(value = "/ilan/all", method = RequestMethod.GET)
     public String list(Model model) {
         List<Advert> adList = advertService.loadAllActiveAdverts();
@@ -56,12 +57,7 @@ public class AdvertController {
     @RequestMapping(value = "/ilan/{ad_code}")
     public String getAdvertByCode(@PathVariable("ad_code") int adCode, Model model) {
         Advert advert = advertService.loadAdvertByAdCode(adCode);
-
-        if (advert == null)
-            return "/error?message=not_found";
-
         boolean hasApplied = false;
-
         boolean isRegistered = this.isRegistered();
 
         if (isRegistered)
@@ -77,10 +73,6 @@ public class AdvertController {
 
     @RequestMapping(value = "/ilan/{ad_code}/apply")
     public String applyToAdvert(@PathVariable("ad_code") int adCode, RedirectAttributes redirectAttributes) {
-        Advert advert = advertService.loadAdvertByAdCode(adCode);
-
-        if (advert == null)
-            return "/error?message=not_found";
 
         if (!isRegistered()) {
             redirectAttributes.addFlashAttribute("infoFlash", "Ilana basvurmak icin LinkedIn hesabi ile giris yapin");
@@ -90,7 +82,7 @@ public class AdvertController {
         Account account = accountService.loadAccountByEmail(getAuthenticatedEmail());
         if (account.getBlacklist() != null) {
             redirectAttributes.addFlashAttribute("errorFlash",
-                    "Hesabiniz IK Uzmanlar tarafindan " + account.getBlacklist().getReason() + " sebebiyle ile karalistelenmis,bu ilana basvuramazsiniz!");
+                    "Hesabiniz IK Uzmanlar tarafindan " + account.getBlacklist().getReason() + " sebebiyle  karalistelendi,bu ilana basvuramazsiniz!");
             return "redirect:/ilan/" + adCode;
         }
 
@@ -98,8 +90,6 @@ public class AdvertController {
         redirectAttributes.addFlashAttribute("successFlash", "Ilana Basvuruldu");
         return "redirect:/user/basvurularim";
     }
-
-
 
 
 
@@ -112,13 +102,14 @@ public class AdvertController {
         }
 
         if (!DateUtil.isValidDate(advertForm.getAdActivation()) && !DateUtil.isValidDate(advertForm.getAdDeadline())) {
-            redirectAttributes.addFlashAttribute("errorFlash", "Yanlış tarih biçimi!!");
+            redirectAttributes.addFlashAttribute("errorFlash", "Geçersiz tarih!");
             return "redirect:/admin/ilan/yeni";
         }
 
         if (advertForm.getAdCode() > 0) {
+
             advertService.updateAdvert(advertForm);
-            redirectAttributes.addFlashAttribute("successFlash", "Ilan guncellendi!");
+            redirectAttributes.addFlashAttribute("infoFlash", "Ilan guncellendi!");
             return "redirect:/admin/ilan/ilanlar";
         } else {
             advertService.createAdvert(advertForm.buildAdvert());
@@ -140,7 +131,6 @@ public class AdvertController {
     }
 
     private String getAuthenticatedEmail() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Account account = (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return account.getEmail();

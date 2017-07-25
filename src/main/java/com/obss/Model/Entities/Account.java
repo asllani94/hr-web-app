@@ -36,13 +36,13 @@ public class Account   {
 
     @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinTable(name = "account_skills", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "skill_id"))
-    private Set<Skill> skills=new HashSet<Skill>();
+    private Set<Skill> skills = new HashSet<>();
 
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy ="pk.account", cascade =
             {CascadeType.PERSIST, CascadeType.MERGE},orphanRemoval = true)
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
-    private Set<Application> adverts=new HashSet<Application>();
+    private Set<Application> adverts = new HashSet<>();
 
 
     public Account(){
@@ -193,5 +193,16 @@ public class Account   {
         this.imageUrl = imageUrl;
     }
 
+
+    public boolean isBlackListed() {
+        return (this.getBlacklist() != null);
+    }
+
+    public String getBlackListTag() {
+        if (isBlackListed())
+            return "karalistelenmis";
+        else
+            return "aktif";
+    }
 
 }

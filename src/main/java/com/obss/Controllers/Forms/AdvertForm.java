@@ -113,7 +113,6 @@ public class AdvertForm {
             e.printStackTrace();
         }
 
-        advert.setAdDeadlineTime(new Timestamp(555));
         advert.setSkills(this.skillList);
         return advert;
     }
