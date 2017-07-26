@@ -67,7 +67,6 @@ public class AdminController {
         return "/ilan/list";
     }
 
-
     @RequestMapping(value = {"/admin/ilan/{ad_code}"})
     public String adminAdvertInfo(@PathVariable(value = "ad_code") int adCode, Model model) {
         List<UserApplication> orderedCandidates = advertService.getCandidateApplications(adCode);
@@ -82,7 +81,6 @@ public class AdminController {
         model.addAttribute("list", accounts);
         return "/user/user_list";
     }
-
 
     @RequestMapping(value = {"/admin/ilan/yeni"})
     public String adminAdvertCreate(Model model) {
