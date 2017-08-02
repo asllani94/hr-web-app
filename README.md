@@ -1,4 +1,4 @@
-# hr-web-app
+
 
 Human Resource Job Application and Management System comes in need to every company’s Human Resource Department as an easy way to create job adverts and skills needed for each job and manage application made by different candidates.
 
