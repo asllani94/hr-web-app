@@ -2,14 +2,18 @@ package com.obss.Utils;
 
 import com.obss.Model.Entities.Extras.ApplicationStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 /**
@@ -27,8 +31,11 @@ public class EmailUtil {
         this.mailSender = new JavaMailSenderImpl();
         this.mailSender.setHost("smtp.gmail.com");
         this.mailSender.setPort(587);
-        this.mailSender.setUsername("thinkfastdieoldgrowbigkuddos@gmail.com");
-        this.mailSender.setPassword("ojxgkioomiybjnmt");
+
+        //set it according to your username and password
+        this.mailSender.setUsername("johndoe@gmail.com");
+        this.mailSender.setPassword("secretPasss123");
+
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
@@ -37,13 +44,37 @@ public class EmailUtil {
     }
 
     @Async("threadPoolTaskExecutor")
-    private void sendMail(String to, String subject, String text) {
+    public void sendMail(String to, String subject, String text) {
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(text);
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setTo(to);
+        simpleMailMessage.setSubject(subject);
+        simpleMailMessage.setText(text);
+        simpleMailMessage.setFrom(mailSender.getUsername());
+        MimeMessage message = mailSender.createMimeMessage();
+
+        try{
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            helper.setFrom(simpleMailMessage.getFrom());
+            helper.setTo(simpleMailMessage.getTo());
+            helper.setSubject(simpleMailMessage.getSubject());
+            helper.setText(simpleMailMessage.getText());
+
+
+            //Attachments
+            FileSystemResource CV = new FileSystemResource("C:\\Users\\arnold\\Downloads\\CV.pdf");
+            //FileSystemResource CoverLetter = new FileSystemResource("C:\Users\arnold\Downloads\Cover.pdf");
+
+            helper.addAttachment("CV.pdf", CV);
+            //helper.addAttachment("Cover Letter",CoverLetter);
+
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
         mailSender.send(message);
+
     }
 
     public void notifyStatusChange(String emailTo, int status, int adCode) {
@@ -74,3 +105,4 @@ public class EmailUtil {
         this.sendMail(emailTo, subject, message);
     }
 }
+
